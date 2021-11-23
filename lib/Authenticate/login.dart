@@ -70,7 +70,10 @@ class _AppSignInState extends State<AppSignIn> {
                     child: RaisedButton(
                       padding: EdgeInsets.all(17.0),
                       onPressed: () async {
-                        final snackbar = SnackBar(content: Text("OTP Sent"));
+                        final snackbar = SnackBar(
+                          content: Text("OTP Sent"),
+                          duration: const Duration(seconds: 5),
+                        );
                         ScaffoldMessenger.of(context).showSnackBar(snackbar);
                         Navigator.push(
                           context,

@@ -1,0 +1,54 @@
+import 'package:flutter/material.dart';
+import 'package:jeevamrut_app/Screens/dashboard.dart';
+import 'package:jeevamrut_app/Screens/orders.dart';
+import 'package:jeevamrut_app/Screens/product_detail.dart';
+import 'package:jeevamrut_app/Screens/profile.dart';
+
+class BottomNav extends StatefulWidget {
+  const BottomNav({Key? key}) : super(key: key);
+
+  @override
+  _BottomNavState createState() => _BottomNavState();
+}
+
+class _BottomNavState extends State<BottomNav> {
+  int currentIndex = 0;
+  List screens = [
+    ProductDetail(),
+    Orders(),
+    DashBoard(),
+    Profile(),
+  ];
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: screens[currentIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        backgroundColor: Colors.blue,
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.white70,
+        currentIndex: currentIndex,
+        onTap: (index) => setState(() => currentIndex = index),
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.shopping_cart),
+            label: 'Checkout',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.shopping_bag),
+            label: 'Orders',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
+        ],
+      ),
+    );
+  }
+}

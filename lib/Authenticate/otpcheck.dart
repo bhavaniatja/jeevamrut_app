@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:jeevamrut_app/Screens/home.dart';
+import 'package:jeevamrut_app/bottomnav.dart';
 
 class OtpScreen extends StatefulWidget {
   const OtpScreen({Key? key}) : super(key: key);
@@ -72,12 +72,14 @@ class _OtpScreenState extends State<OtpScreen> {
                     child: RaisedButton(
                       padding: EdgeInsets.all(17.0),
                       onPressed: () {
-                        final snackbar =
-                            SnackBar(content: Text("OTP verified"));
+                        final snackbar = SnackBar(
+                          content: Text("OTP verified"),
+                          duration: const Duration(seconds: 3),
+                        );
                         ScaffoldMessenger.of(context).showSnackBar(snackbar);
                         Navigator.pushAndRemoveUntil(
                           context,
-                          MaterialPageRoute(builder: (context) => HomePage()),
+                          MaterialPageRoute(builder: (context) => BottomNav()),
                           (Route<dynamic> route) => false,
                         );
                       },

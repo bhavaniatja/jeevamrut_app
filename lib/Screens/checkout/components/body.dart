@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:jeevamrut_app/Screens/checkout/components/address_card.dart';
 import 'package:jeevamrut_app/Screens/checkout/components/final_cart_card.dart';
 import 'package:jeevamrut_app/models/Cart.dart';
-
-import '../../../size_config.dart';
-import 'payment_card.dart';
 
 class Body extends StatefulWidget {
   const Body({Key? key}) : super(key: key);
@@ -16,14 +13,28 @@ class Body extends StatefulWidget {
 class _BodyState extends State<Body> {
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20.0),
-      child: ListView.builder(
-        itemCount: demoCarts.length,
-        itemBuilder: (context, index) => Padding(
-            padding: EdgeInsets.symmetric(vertical: 10),
-            child: FinalCartCard(cart: demoCarts[index])),
-      ),
+    return ListView(
+      children: const [
+        SizedBox(
+          height: 200, // constrain height
+          child: LstView(),
+        ),
+        Expanded(child: AddressCard()),
+      ],
+    );
+  }
+}
+
+class LstView extends StatelessWidget {
+  const LstView({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: demoCarts.length,
+      itemBuilder: (context, index) => Padding(
+          padding: EdgeInsets.symmetric(vertical: 10),
+          child: FinalCartCard(cart: demoCarts[index])),
     );
   }
 }

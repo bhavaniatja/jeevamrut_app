@@ -33,3 +33,4 @@ class CheckOutScreen extends StatelessWidget {
     );
   }
 }
+//issue sol: https://stackoverflow.com/questions/57158031/how-to-make-a-screen-scrollable-in-flutter

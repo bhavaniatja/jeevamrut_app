@@ -38,7 +38,7 @@ class PaymentCard extends StatelessWidget {
               backgroundColor: MaterialStateProperty.all<Color>(kPrimaryColor),
             ),
             onPressed: () {},
-            child: Text(
+            child: const Text(
               "Pay",
               style: TextStyle(
                 fontSize: 18.0,

@@ -61,6 +61,15 @@ flutter:
   assets:
     - assets/images/jeevamrut_logo.png
     - assets/images/apples.png
+    - assets/icons/Bell.svg
+    - assets/images/Profile Image.png
+    - assets/icons/User Icon.svg
+    - assets/icons/Settings.svg
+    - assets/icons/Question mark.svg
+    - assets/icons/Log out.svg
+    - assets/icons/Camera Icon.svg
+    - assets/icons/Trash.svg
+    - assets/icons/receipt.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

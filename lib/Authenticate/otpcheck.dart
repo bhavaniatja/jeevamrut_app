@@ -41,6 +41,12 @@ class _OtpScreenState extends State<OtpScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
+                  Container(
+                    width: 130,
+                    height: 130,
+                    alignment: Alignment.center,
+                    child: Image.asset("assets/images/jeevamrut_logo.png"),
+                  ),
                   SizedBox(
                     height: 15,
                   ),

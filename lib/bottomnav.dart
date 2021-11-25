@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:jeevamrut_app/Screens/dashboard.dart';
 import 'package:jeevamrut_app/Screens/orders.dart';
 import 'package:jeevamrut_app/Screens/product_detail.dart';
-import 'package:jeevamrut_app/Screens/profile.dart';
+import 'package:jeevamrut_app/Screens/profile/profile_screen.dart';
 
 class BottomNav extends StatefulWidget {
   const BottomNav({Key? key}) : super(key: key);
@@ -17,7 +17,7 @@ class _BottomNavState extends State<BottomNav> {
     ProductDetail(),
     Orders(),
     DashBoard(),
-    Profile(),
+    ProfileScreen(),
   ];
   @override
   Widget build(BuildContext context) {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:jeevamrut_app/Screens/cartscreen.dart';
+import 'package:jeevamrut_app/Screens/cart/cart_screen.dart';
 import 'package:jeevamrut_app/models/product.dart';
 
 class ProductDetail extends StatefulWidget {

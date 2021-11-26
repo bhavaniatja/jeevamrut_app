@@ -70,6 +70,21 @@ flutter:
     - assets/icons/Camera Icon.svg
     - assets/icons/Trash.svg
     - assets/icons/receipt.svg
+    - assets/icons/Bell.svg
+    - assets/images/Image Banner 2.png
+    - assets/images/Image Banner 3.png
+    - assets/icons/Heart Icon_2.svg
+    - assets/icons/Flash Icon.svg
+    - assets/icons/Bill Icon.svg
+    - assets/icons/Game Icon.svg
+    - assets/icons/Gift Icon.svg
+    - assets/icons/Discover.svg
+    - assets/icons/Cart Icon.svg
+    - assets/icons/fruits.svg
+    - assets/icons/farm.svg
+    - assets/images/vegetables_offers.png
+    - assets/images/fruits_offers.png
+    - assets/icons/vegetables-salad.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

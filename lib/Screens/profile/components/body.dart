@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jeevamrut_app/Screens/wallet/wallet_screen.dart';
 
 import 'profile_menu.dart';
 import 'profile_pic.dart';
@@ -18,13 +19,16 @@ class Body extends StatelessWidget {
             press: () => {},
           ),
           ProfileMenu(
-            text: "Notifications",
-            icon: "assets/icons/Bell.svg",
-            press: () {},
+            text: "Wallet",
+            icon: "assets/icons/wallet.svg",
+            press: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => WalletScreen()));
+            },
           ),
           ProfileMenu(
-            text: "Settings",
-            icon: "assets/icons/Settings.svg",
+            text: "Saved Address",
+            icon: "assets/icons/location.svg",
             press: () {},
           ),
           ProfileMenu(

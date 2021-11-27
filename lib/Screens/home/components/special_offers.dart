@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jeevamrut_app/Screens/categories/categories_screen.dart';
 import 'package:jeevamrut_app/size_config.dart';
 import 'section_title.dart';
 
@@ -15,7 +16,10 @@ class SpecialOffers extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 20),
           child: SectionTitle(
             title: "Special for you",
-            press: () {},
+            press: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => CategoriesScreen()));
+            },
           ),
         ),
         SizedBox(height: 20),

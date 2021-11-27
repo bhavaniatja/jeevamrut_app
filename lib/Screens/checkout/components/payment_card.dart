@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:jeevamrut_app/Screens/ordersuccess/order_success_screen.dart';
 
 import '../../../constants.dart';
 
@@ -37,7 +38,12 @@ class PaymentCard extends StatelessWidget {
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all<Color>(kPrimaryColor),
             ),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => OrderSuccessScreen()));
+            },
             child: const Text(
               "Pay",
               style: TextStyle(

@@ -16,7 +16,7 @@ class TitleHeader extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Row(
-        children: const [
+        children: [
           AppTitle(),
           Spacer(),
           Expanded(

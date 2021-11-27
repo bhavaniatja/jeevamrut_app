@@ -36,6 +36,7 @@ dependencies:
   http: ^0.13.4
   flutter_svg: ^0.22.0
   provider: ^6.0.0
+  im_stepper: ^0.1.2+10
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -79,6 +80,8 @@ flutter:
     - assets/icons/Game Icon.svg
     - assets/icons/Gift Icon.svg
     - assets/icons/Discover.svg
+    - assets/icons/wallet.svg
+    - assets/icons/location.svg
     - assets/icons/Cart Icon.svg
     - assets/icons/fruits.svg
     - assets/icons/farm.svg
@@ -97,10 +100,10 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
+  fonts:
+    - family: Varela
+      fonts:
+        - asset: assets/fonts/VarelaRound-Regular.ttf
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro

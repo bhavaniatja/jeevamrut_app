@@ -38,7 +38,7 @@ class _AddressCardState extends State<AddressCard> {
               width: double.infinity,
               child: Column(
                 children: [
-                  Text(
+                  const Text(
                     "Saved Address",
                     textAlign: TextAlign.center,
                     style: TextStyle(
@@ -47,7 +47,7 @@ class _AddressCardState extends State<AddressCard> {
                     ),
                   ),
                   Divider(),
-                  Text(
+                  const Text(
                     "13-260,indiranagar,Hyderabad,567890",
                     textAlign: TextAlign.center,
                     style: TextStyle(
@@ -55,19 +55,24 @@ class _AddressCardState extends State<AddressCard> {
                       color: Colors.black,
                     ),
                   ),
-                  ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all<Color>(kPrimaryColor),
-                    ),
-                    onPressed: () {},
-                    child: const Text(
-                      "Change Address",
-                      style: TextStyle(
-                        fontSize: 18.0,
-                        color: Colors.white,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all<Color>(kPrimaryColor),
+                        ),
+                        onPressed: () {},
+                        child: const Text(
+                          "Change Address",
+                          style: TextStyle(
+                            fontSize: 18.0,
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
-                    ),
+                    ],
                   ),
                 ],
               ),

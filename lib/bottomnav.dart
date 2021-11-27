@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:jeevamrut_app/Screens/categories/categories_screen.dart';
 import 'package:jeevamrut_app/Screens/home/home_screen.dart';
-import 'package:jeevamrut_app/Screens/orders.dart';
+import 'package:jeevamrut_app/Screens/orders/orders_screen.dart';
 import 'package:jeevamrut_app/Screens/product_detail.dart';
+import 'package:jeevamrut_app/Screens/productgrid/product_grid.dart';
 import 'package:jeevamrut_app/Screens/profile/profile_screen.dart';
 
 class BottomNav extends StatefulWidget {
@@ -14,9 +16,9 @@ class BottomNav extends StatefulWidget {
 class _BottomNavState extends State<BottomNav> {
   int currentIndex = 0;
   List screens = [
-    const ProductDetail(),
-    Orders(),
     HomeScreen(),
+    const ProductDetail(),
+    OrdersScreen(),
     ProfileScreen(),
   ];
   @override

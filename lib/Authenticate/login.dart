@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jeevamrut_app/Authenticate/check.dart';
 import 'package:jeevamrut_app/Authenticate/otpcheck.dart';
 
 class AppSignIn extends StatefulWidget {
@@ -9,6 +10,7 @@ class AppSignIn extends StatefulWidget {
 }
 
 class _AppSignInState extends State<AppSignIn> {
+  final _textController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     String defaultFontFamily = 'Roboto-Light.ttf';
@@ -38,6 +40,7 @@ class _AppSignInState extends State<AppSignIn> {
                     height: 15,
                   ),
                   TextField(
+                    controller: _textController,
                     showCursor: true,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
@@ -77,7 +80,8 @@ class _AppSignInState extends State<AppSignIn> {
                         ScaffoldMessenger.of(context).showSnackBar(snackbar);
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => OtpScreen()),
+                          MaterialPageRoute(
+                              builder: (context) => CheckScreen()),
                         );
                       },
                       child: Text(

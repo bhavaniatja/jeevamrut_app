@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "459745564361",
+    "project_id": "jeevamrut-63105",
+    "storage_bucket": "jeevamrut-63105.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:459745564361:android:38858d85758a028af45f18",
+        "android_client_info": {
+          "package_name": "com.example.jeevamrut_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "459745564361-7skkidpeabnl8eurmdcjkn3eia2pfdod.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.jeevamrut_app",
+            "certificate_hash": "f64447d0c686c6a7742146cf198010dc613c1abd"
+          }
+        },
+        {
+          "client_id": "459745564361-tl48j4du31m446vkq8vrtnivntmrr7ae.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZ-93tcviHyo46W5-hydcvycHec0Pr5ao"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "459745564361-tl48j4du31m446vkq8vrtnivntmrr7ae.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

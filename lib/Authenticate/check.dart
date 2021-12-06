@@ -35,7 +35,6 @@ class _CheckScreenState extends State<CheckScreen> {
     setState(() {
       showLoading = true;
     });
-
     try {
       final authCredential =
           await _auth.signInWithCredential(phoneAuthCredential);
@@ -284,3 +283,4 @@ class _CheckScreenState extends State<CheckScreen> {
         ));
   }
 }
+//https://www.youtube.com/watch?v=W19IfZ-nqB8

@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:jeevamrut_app/Screens/profile/components/account_details.dart';
+import 'package:jeevamrut_app/Screens/profile/components/address_details.dart';
 import 'package:jeevamrut_app/Screens/wallet/wallet_screen.dart';
 
 import 'profile_menu.dart';
 import 'profile_pic.dart';
 
 class Body extends StatelessWidget {
+  const Body({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -16,20 +20,32 @@ class Body extends StatelessWidget {
           ProfileMenu(
             text: "My Account",
             icon: "assets/icons/User Icon.svg",
-            press: () => {},
+            press: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const AccountDetails()));
+            },
           ),
           ProfileMenu(
             text: "Wallet",
             icon: "assets/icons/wallet.svg",
             press: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => WalletScreen()));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const WalletScreen()));
             },
           ),
           ProfileMenu(
             text: "Saved Address",
             icon: "assets/icons/location.svg",
-            press: () {},
+            press: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const DeliveryDetails()));
+            },
           ),
           ProfileMenu(
             text: "Help Center",

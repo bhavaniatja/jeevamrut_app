@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:jeevamrut_app/Authenticate/check.dart';
-import 'package:jeevamrut_app/Authenticate/otpcheck.dart';
 
 class AppSignIn extends StatefulWidget {
   const AppSignIn({Key? key}) : super(key: key);

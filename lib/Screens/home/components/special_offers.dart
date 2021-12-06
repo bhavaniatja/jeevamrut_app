@@ -31,13 +31,23 @@ class SpecialOffers extends StatelessWidget {
                 image: "assets/images/fruits_offers.png",
                 category: "Fruits",
                 numOfBrands: 18,
-                press: () {},
+                press: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const CategoriesScreen()));
+                },
               ),
               SpecialOfferCard(
                 image: "assets/images/vegetables_offers.png",
                 category: "Vegetables",
                 numOfBrands: 24,
-                press: () {},
+                press: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const CategoriesScreen()));
+                },
               ),
               SizedBox(width: 20),
             ],

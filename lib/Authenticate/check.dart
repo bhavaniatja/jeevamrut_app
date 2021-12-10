@@ -15,6 +15,7 @@ class CheckScreen extends StatefulWidget {
 }
 
 class _CheckScreenState extends State<CheckScreen> {
+  static const String routeName = "/auth";
   String defaultFontFamily = 'Roboto-Light.ttf';
   double defaultFontSize = 14;
   double defaultIconSize = 17;
@@ -44,8 +45,7 @@ class _CheckScreenState extends State<CheckScreen> {
       });
 
       if (authCredential.user != null) {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => BottomNav()));
+        Navigator.pushNamed(context, '/');
       }
     } on FirebaseAuthException catch (e) {
       setState(() {
@@ -77,14 +77,14 @@ class _CheckScreenState extends State<CheckScreen> {
                   alignment: Alignment.center,
                   child: Image.asset("assets/images/jeevamrut_logo.png"),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 15,
                 ),
                 TextField(
                   controller: phoneController,
                   showCursor: true,
                   decoration: InputDecoration(
-                    border: OutlineInputBorder(
+                    border: const OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(10.0)),
                       borderSide: BorderSide(
                         width: 0,
@@ -94,25 +94,25 @@ class _CheckScreenState extends State<CheckScreen> {
                     filled: true,
                     prefixIcon: Icon(
                       Icons.phone,
-                      color: Color(0xFF666666),
+                      color: const Color(0xFF666666),
                       size: defaultIconSize,
                     ),
-                    fillColor: Color(0xFFF2F3F5),
+                    fillColor: const Color(0xFFF2F3F5),
                     hintStyle: TextStyle(
-                        color: Color(0xFF666666),
+                        color: const Color(0xFF666666),
                         fontFamily: defaultFontFamily,
                         fontSize: defaultFontSize),
                     hintText: "Phone Number",
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 15,
                 ),
                 Container(
                   width: double.infinity,
                   // ignore: deprecated_member_use
                   child: RaisedButton(
-                    padding: EdgeInsets.all(17.0),
+                    padding: const EdgeInsets.all(17.0),
                     onPressed: () async {
                       setState(() {
                         showLoading = true;
@@ -145,7 +145,7 @@ class _CheckScreenState extends State<CheckScreen> {
                         codeAutoRetrievalTimeout: (verificationId) async {},
                       );
                     },
-                    child: Text(
+                    child: const Text(
                       "Get Otp",
                       style: TextStyle(
                         color: Colors.white,
@@ -154,12 +154,12 @@ class _CheckScreenState extends State<CheckScreen> {
                       ),
                       textAlign: TextAlign.center,
                     ),
-                    color: Color(0xFFBC1F26),
+                    color: const Color(0xFFBC1F26),
                     shape: RoundedRectangleBorder(
-                        borderRadius: new BorderRadius.circular(15.0),
-                        side: BorderSide(color: Color(0xFFBC1F26))),
+                        borderRadius: BorderRadius.circular(15.0),
+                        side: const BorderSide(color: Color(0xFFBC1F26))),
                   ),
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                       shape: BoxShape.circle, color: Color(0xFFF2F3F7)),
                 ),
               ],
@@ -177,7 +177,7 @@ class _CheckScreenState extends State<CheckScreen> {
           flex: 0,
           child: InkWell(
             child: Container(
-              child: Align(
+              child: const Align(
                 alignment: Alignment.topLeft,
                 child: Icon(Icons.arrow_back_ios_new),
               ),
@@ -209,7 +209,7 @@ class _CheckScreenState extends State<CheckScreen> {
                 controller: otpController,
                 showCursor: true,
                 decoration: InputDecoration(
-                  border: OutlineInputBorder(
+                  border: const OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(10.0)),
                     borderSide: BorderSide(
                       width: 0,
@@ -273,7 +273,7 @@ class _CheckScreenState extends State<CheckScreen> {
         key: _scaffoldKey,
         body: Container(
           child: showLoading
-              ? Center(
+              ? const Center(
                   child: CircularProgressIndicator(),
                 )
               : currentState == MobileVerificationState.SHOW_MOBILE_FORM_STATE

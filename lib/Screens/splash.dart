@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jeevamrut_app/Authenticate/check.dart';
 import 'package:jeevamrut_app/Authenticate/login.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -9,6 +10,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  static const String routeName = "/splashscreen";
   @override
   void initState() {
     super.initState();
@@ -18,7 +20,7 @@ class _SplashScreenState extends State<SplashScreen> {
   _navigatetohome() async {
     await Future.delayed(Duration(milliseconds: 1500), () {});
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => AppSignIn()));
+        context, MaterialPageRoute(builder: (context) => CheckScreen()));
   }
 
   @override

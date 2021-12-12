@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jeevamrut_app/Screens/home/components/title_header.dart';
 
-import '../../../size_config.dart';
 import 'categories.dart';
 import 'discount_banner.dart';
 import 'home_header.dart';
@@ -9,7 +8,7 @@ import 'popular_product.dart';
 import 'special_offers.dart';
 
 class Body extends StatelessWidget {
-  const Body({Key? key}) : super(key: key);
+  const Body(BuildContext context, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jeevamrut_app/Screens/categories/categories_screen.dart';
 import 'package:jeevamrut_app/Screens/home/home_screen.dart';
 import 'package:jeevamrut_app/Screens/orders/orders_screen.dart';
 import 'package:jeevamrut_app/Screens/product_detail.dart';
 import 'package:jeevamrut_app/Screens/productgrid/product_grid.dart';
 import 'package:jeevamrut_app/Screens/profile/profile_screen.dart';
+import 'package:jeevamrut_app/cubit/app_cubits_cubit.dart';
+import 'package:jeevamrut_app/repositories/product_repository.dart';
+import 'package:provider/src/provider.dart';
 
 class BottomNav extends StatefulWidget {
   const BottomNav({Key? key}) : super(key: key);
-
   @override
   _BottomNavState createState() => _BottomNavState();
 }
@@ -16,10 +19,10 @@ class BottomNav extends StatefulWidget {
 class _BottomNavState extends State<BottomNav> {
   int currentIndex = 0;
   List screens = [
-    HomeScreen(),
+    const HomeScreen(),
     const ProductDetail(),
-    OrdersScreen(),
-    ProfileScreen(),
+    const OrdersScreen(),
+    const ProfileScreen(),
   ];
   @override
   Widget build(BuildContext context) {
@@ -32,7 +35,7 @@ class _BottomNavState extends State<BottomNav> {
         unselectedItemColor: Colors.white70,
         currentIndex: currentIndex,
         onTap: (index) => setState(() => currentIndex = index),
-        items: [
+        items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',

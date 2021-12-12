@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jeevamrut_app/Screens/productgrid/product_grid.dart';
+import 'package:jeevamrut_app/cubit/app_cubits_cubit.dart';
 
 class Body extends StatefulWidget {
   const Body({Key? key}) : super(key: key);
@@ -10,7 +12,7 @@ class Body extends StatefulWidget {
 
 class _BodyState extends State<Body> {
   @override
-  Widget build(BuildContext context) {
+  getCategories(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFFFCFAF8),
       body: ListView(
@@ -40,12 +42,12 @@ class _BodyState extends State<Body> {
   }
 
   Widget _buildCard(String name, String imgPath, context) {
+    final cubit = BlocProvider.of<AppCubitsCubit>(context);
     return Padding(
         padding: EdgeInsets.only(top: 5.0, left: 5.0, right: 5.0),
         child: InkWell(
             onTap: () {
-              Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => ProdcutGridScreen()));
+              cubit.getData();
             },
             child: Container(
                 decoration: BoxDecoration(
@@ -76,5 +78,28 @@ class _BodyState extends State<Body> {
                               fontFamily: 'Varela',
                               fontSize: 20.0)),
                     ]))));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final cubit = BlocProvider.of<AppCubitsCubit>(context);
+    return BlocListener<AppCubitsCubit, AppCubitsState>(
+      listener: (context, state) {
+        if (state is AppLoading) {
+          CircularProgressIndicator();
+        } else if (state is AppLoaded && cubit.products != []) {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => ProdcutGridScreen(cubit.products)));
+        } else {
+          Container(
+            child: Text("Error Bae!"),
+          );
+        }
+      },
+      bloc: cubit,
+      child: Scaffold(body: getCategories(context)),
+    );
   }
 }

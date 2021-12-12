@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
-import 'package:jeevamrut_app/bottomnav.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 enum MobileVerificationState {
   SHOW_MOBILE_FORM_STATE,
@@ -45,6 +45,10 @@ class _CheckScreenState extends State<CheckScreen> {
       });
 
       if (authCredential.user != null) {
+        var phone = (authCredential.user!.phoneNumber).toString();
+
+        // SharedPreferences pref = await SharedPreferences.getInstance();
+        // pref.setString('phone', phone);
         Navigator.pushNamed(context, '/');
       }
     } on FirebaseAuthException catch (e) {

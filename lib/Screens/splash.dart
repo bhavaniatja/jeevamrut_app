@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:jeevamrut_app/Authenticate/check.dart';
-import 'package:jeevamrut_app/Authenticate/login.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);

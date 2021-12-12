@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:jeevamrut_app/models/product_response.dart';
 import 'components/body.dart';
 
+// ignore: must_be_immutable
 class ProdcutGridScreen extends StatelessWidget {
-  const ProdcutGridScreen({Key? key}) : super(key: key);
-
+  final List<ProductResponse>? productData;
+  const ProdcutGridScreen(this.productData, {Key? key}) : super(key: key);
+  // static const String routeName = "/productscreen";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,11 +29,13 @@ class ProdcutGridScreen extends StatelessWidget {
           IconButton(
             icon:
                 const Icon(Icons.notifications_none, color: Color(0xFF545D68)),
-            onPressed: () {},
+            onPressed: () {
+              print(this.productData?[0].description);
+            },
           ),
         ],
       ),
-      body: const Body(),
+      body: Body(productData),
     );
   }
 }

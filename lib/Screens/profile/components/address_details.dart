@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:jeevamrut_app/Screens/profile/components/add_delivery_address.dart';
 import 'package:jeevamrut_app/Screens/profile/components/single_delivery_address.dart';
+import 'package:jeevamrut_app/models/address_response.dart';
 
+// ignore: must_be_immutable
 class DeliveryDetails extends StatefulWidget {
-  const DeliveryDetails({Key? key}) : super(key: key);
+  AddressResponse addressdata;
+  DeliveryDetails(this.addressdata, {Key? key}) : super(key: key);
 
   @override
   _DeliveryDetailsState createState() => _DeliveryDetailsState();
@@ -47,10 +50,10 @@ class _DeliveryDetailsState extends State<DeliveryDetails> {
           ),
           Column(children: [
             SingleDeliveryItem(
-                address: "My Home Bhooja,13/678,Room No:450,Madhapur,566722",
-                title: "Bhavani Prasad",
-                number: '9944588103',
-                addressType: "Home")
+                address: '${widget.addressdata.city}',
+                title: '${widget.addressdata.createdBy}',
+                number: '${widget.addressdata.mobile}',
+                addressType: '${widget.addressdata.type}')
           ]),
         ],
       ),

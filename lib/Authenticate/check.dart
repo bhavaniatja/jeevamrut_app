@@ -1,5 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
+import 'package:jeevamrut_app/cubit/app_cubits_cubit.dart';
+import 'package:jeevamrut_app/models/firebaseuser.dart';
+import 'package:jeevamrut_app/services/auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 enum MobileVerificationState {
@@ -31,36 +34,37 @@ class _CheckScreenState extends State<CheckScreen> {
 
   bool showLoading = false;
 
-  void signInWithPhoneAuthCredential(
-      PhoneAuthCredential phoneAuthCredential) async {
-    setState(() {
-      showLoading = true;
-    });
-    try {
-      final authCredential =
-          await _auth.signInWithCredential(phoneAuthCredential);
+  // void signInWithPhoneAuthCredential(
+  //     PhoneAuthCredential phoneAuthCredential) async {
+  //   setState(() {
+  //     showLoading = true;
+  //   });
+  //   try {
+  //     final authCredential =
+  //         await _auth.signInWithCredential(phoneAuthCredential);
 
-      setState(() {
-        showLoading = false;
-      });
+  //     setState(() {
+  //       showLoading = false;
+  //     });
 
-      if (authCredential.user != null) {
-        var phone = (authCredential.user!.phoneNumber).toString();
+  //     if (authCredential.user != null) {
+  //       var phone = (authCredential.user!.phoneNumber).toString();
 
-        // SharedPreferences pref = await SharedPreferences.getInstance();
-        // pref.setString('phone', phone);
-        Navigator.pushNamed(context, '/');
-      }
-    } on FirebaseAuthException catch (e) {
-      setState(() {
-        showLoading = false;
-      });
+  //       final SharedPreferences pref = await SharedPreferences.getInstance();
+  //       pref.setString('phone', phone);
+  //       _authUserFromFirebase(authCredential.user);
+  //       // Navigator.pushNamed(context, '/');
+  //     }
+  //   } on FirebaseAuthException catch (e) {
+  //     setState(() {
+  //       showLoading = false;
+  //     });
 
-      _scaffoldKey.currentState!
-          // ignore: deprecated_member_use
-          .showSnackBar(SnackBar(content: Text(e.message!)));
-    }
-  }
+  //     _scaffoldKey.currentState!
+  //         // ignore: deprecated_member_use
+  //         .showSnackBar(SnackBar(content: Text(e.message!)));
+  //   }
+  // }
 
   getMobileFormWidget(context) {
     return Container(
@@ -242,8 +246,20 @@ class _CheckScreenState extends State<CheckScreen> {
                         PhoneAuthProvider.credential(
                             verificationId: verificationId,
                             smsCode: otpController.text);
-
-                    signInWithPhoneAuthCredential(phoneAuthCredential);
+                    setState(() {
+                      showLoading = true;
+                    });
+                    dynamic result = await AuthService()
+                        .signInWithPhoneAuthCredential(phoneAuthCredential);
+                    if (result == null) {
+                      setState(() {
+                        showLoading = false;
+                      });
+                      _scaffoldKey.currentState!
+                          // ignore: deprecated_member_use
+                          .showSnackBar(
+                              SnackBar(content: Text("Unable to Login")));
+                    }
                   },
                   child: Text(
                     "Sign In",

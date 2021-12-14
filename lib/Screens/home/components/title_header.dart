@@ -3,9 +3,6 @@ import 'package:jeevamrut_app/Screens/cart/cart_screen.dart';
 import 'package:jeevamrut_app/Screens/home/components/app_title.dart';
 import 'package:jeevamrut_app/Screens/home/components/location_field.dart';
 
-import 'icon_btn_with_counter.dart';
-import 'search_field.dart';
-
 class TitleHeader extends StatelessWidget {
   const TitleHeader({
     Key? key,

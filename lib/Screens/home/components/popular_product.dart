@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:jeevamrut_app/components/product_card.dart';
 import 'package:jeevamrut_app/models/Product.dart';
+import 'package:jeevamrut_app/models/product_response.dart';
 
 import 'section_title.dart';
 
 class PopularProducts extends StatelessWidget {
-  const PopularProducts({Key? key}) : super(key: key);
-
+  const PopularProducts(this.products, {Key? key}) : super(key: key);
+  final List<ProductResponse> products;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -21,14 +22,14 @@ class PopularProducts extends StatelessWidget {
           child: Row(
             children: [
               ...List.generate(
-                demoProducts.length,
+                products.length,
                 (index) {
-                  if (demoProducts[index].isPopular) {
-                    return ProductCard(product: demoProducts[index]);
-                  }
-
-                  return const SizedBox
-                      .shrink(); // here by default width and height is 0
+                  // if (products[index].isPopular) {
+                  //   return ProductCard(product: demoProducts[index]);
+                  // }
+                  return ProductCard(product: products[index]);
+                  // return const SizedBox
+                  //     .shrink(); // here by default width and height is 0
                 },
               ),
               const SizedBox(width: 20),

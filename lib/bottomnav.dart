@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:jeevamrut_app/Screens/cartscreen.dart';
 import 'package:jeevamrut_app/Screens/categories/categories_screen.dart';
 import 'package:jeevamrut_app/Screens/home/home_screen.dart';
 import 'package:jeevamrut_app/Screens/orders/orders_screen.dart';
@@ -21,8 +22,8 @@ class _BottomNavState extends State<BottomNav> {
   List screens = [
     const HomeScreen(),
     const ProductDetail(),
-    const OrdersScreen(),
-    const ProfileScreen(),
+    CartScreen(),
+    CartScreen(),
   ];
   @override
   Widget build(BuildContext context) {

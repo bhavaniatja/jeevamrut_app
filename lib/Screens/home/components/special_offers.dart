@@ -42,12 +42,7 @@ class SpecialOffers extends StatelessWidget {
                 image: "assets/images/vegetables_offers.png",
                 category: "Vegetables",
                 numOfBrands: 24,
-                press: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const CategoriesScreen()));
-                },
+                press: () {},
               ),
               SizedBox(width: 20),
             ],

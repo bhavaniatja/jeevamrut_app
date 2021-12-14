@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jeevamrut_app/Authenticate/check.dart';
+import 'package:jeevamrut_app/wrapper.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -19,7 +20,7 @@ class _SplashScreenState extends State<SplashScreen> {
   _navigatetohome() async {
     await Future.delayed(Duration(milliseconds: 1500), () {});
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => CheckScreen()));
+        context, MaterialPageRoute(builder: (context) => Wrapper()));
   }
 
   @override

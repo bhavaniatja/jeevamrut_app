@@ -17,32 +17,28 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     });
     on<CartProductAdded>((event, Emitter<CartState> emit) {
       _checkAdded(event, emit);
-      print(event.product);
     });
     on<CartProductRemoved>((event, emit) {
-      if (state is CartLoaded) {
-        try {
-          emit(CartLoaded(
-            cart: Cart(
-              products: List.from((state as CartLoaded).cart.products)
-                ..remove(event.product),
-            ),
-          ));
-        } on Exception {
-          emit(CartError());
-        }
+      try {
+        emit(CartLoaded(
+          cart: Cart(
+            products: List.from((state as CartLoaded).cart.products)
+              ..remove(event.product),
+          ),
+        ));
+        print((state as CartLoaded).cart.products);
+      } on Exception {
+        emit(CartError());
       }
     });
   }
   void _checkAdded(CartProductAdded event, Emitter<CartState> emit) {
-    if (state is CartLoaded) {
-      print(event.product);
-      emit(CartLoaded(
-        cart: Cart(
-          products: List.from((state as CartLoaded).cart.products)
-            ..add(event.product),
-        ),
-      ));
-    }
+    emit(CartLoaded(
+      cart: Cart(
+        products: List.from((state as CartLoaded).cart.products)
+          ..add(event.product),
+      ),
+    ));
+    print((state as CartLoaded).cart.products);
   }
 }

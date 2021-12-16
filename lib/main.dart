@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jeevamrut_app/Authenticate/check.dart';
 import 'package:jeevamrut_app/Screens/cart/cart_screen.dart';
+import 'package:jeevamrut_app/Screens/checkout/checkout_screen.dart';
 import 'package:jeevamrut_app/Screens/home/home_screen.dart';
 import 'package:jeevamrut_app/Screens/productgrid/product_grid.dart';
 import 'package:jeevamrut_app/Screens/profile/components/address_details.dart';
@@ -62,6 +63,7 @@ class MyApp extends StatelessWidget {
           "/cart": (context) => CartScreen(),
           "/profile": (context) => ProfileScreen(),
           "/address": (context) => DeliveryDetails(),
+          "/checkout": (context) => CheckOutScreen(),
           // "/productscreen": (context) => ProdcutGridScreen(),
         },
         debugShowCheckedModeBanner: false,

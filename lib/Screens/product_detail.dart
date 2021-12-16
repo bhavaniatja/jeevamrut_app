@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:im_stepper/stepper.dart';
 import 'package:jeevamrut_app/Screens/cart/cart_screen.dart';
+import 'package:jeevamrut_app/bloc/bloc/product_bloc.dart';
 import 'package:jeevamrut_app/bloc/cart/cart_bloc.dart';
 import 'package:jeevamrut_app/models/product.dart';
 import 'package:jeevamrut_app/models/product_response.dart';
@@ -13,6 +15,14 @@ class ProductDetail extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios),
+          onPressed: () {
+            // BlocProvider.of<ProductBloc>(context).add((LoadingProductEvent()));
+            // BlocProvider.of<ProductBloc>(context).add((LoadProducts()));
+            Navigator.of(context).pop();
+          },
+        ),
         actions: [
           IconButton(
               onPressed: () {},
@@ -77,23 +87,73 @@ class ProductDetail extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      InkWell(
-                        child: Icon(
-                          Icons.remove,
-                          size: 30.0,
+                      IconButton(
+                        icon: Icon(
+                          Icons.add_circle,
+                          color: Colors.black,
                         ),
-                        onTap: () {},
+                        onPressed: () {
+                          final snackBar = SnackBar(
+                            content: Text('Added to your Cart!'),
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                          context.read<CartBloc>().add(
+                                CartProductAdded(product),
+                              );
+                        },
                       ),
-                      Text(
-                        "20",
-                        style: TextStyle(fontSize: 30),
+                      BlocBuilder<CartBloc, CartState>(
+                          builder: (context, state) {
+                        if (state is CartLoaded) {
+                          Future.delayed(Duration(seconds: 1));
+                          int ind;
+                          if (state.cart
+                              .productQuantity(state.cart.products)
+                              .keys
+                              .contains(product)) {
+                            // print(state.cart
+                            //     .productQuantity(state.cart.products)
+                            //     .keys
+                            //     .length);
+                            for (int i = 0;
+                                i <
+                                    state.cart
+                                        .productQuantity(state.cart.products)
+                                        .keys
+                                        .length;
+                                i++) {
+                              if (state.cart
+                                      .productQuantity(state.cart.products)
+                                      .keys
+                                      .elementAt(i) ==
+                                  product) {
+                                return Text(
+                                    '${state.cart.productQuantity(state.cart.products).values.elementAt(i)}');
+                              }
+                              // print("yes ${i}");
+                            }
+                          } else {
+                            return Text("0", style: TextStyle(fontSize: 20));
+                          }
+                          // int ind = state.cart.products.indexWhere(
+                          //     (element) => element.id == widget.product.id);
+                        }
+                        return Text(
+                          "0",
+                          style: TextStyle(fontSize: 20),
+                        );
+                      }),
+                      IconButton(
+                        icon: Icon(
+                          Icons.remove_circle,
+                          color: Colors.black,
+                        ),
+                        onPressed: () {
+                          context.read<CartBloc>().add(
+                                CartProductRemoved(product),
+                              );
+                        },
                       ),
-                      InkWell(
-                          child: Icon(
-                            Icons.add,
-                            size: 30.0,
-                          ),
-                          onTap: () {}),
                     ],
                   ),
                   BlocBuilder<CartBloc, CartState>(
@@ -173,7 +233,7 @@ class ProductDetail extends StatelessWidget {
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
                           color: Color(0xFF565656))),
-                  Text("${demoProducts[0].price!}",
+                  Text("\u20b9 ${product.price!}",
                       style: TextStyle(
                           fontFamily: 'Roboto-Light.ttf',
                           fontSize: 20,

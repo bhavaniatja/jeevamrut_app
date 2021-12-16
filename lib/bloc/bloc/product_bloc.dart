@@ -16,6 +16,9 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
   ProductBloc({required ProductRepository productRepository})
       : _productRepository = productRepository,
         super(ProductLoading()) {
+    on<LoadingProductEvent>((event, emit) {
+      emit((ProductLoading()));
+    });
     on<LoadProducts>((event, emit) async {
       final products = await _productRepository.getProductsFromApi();
       emit((ProductLoaded(products: products)));

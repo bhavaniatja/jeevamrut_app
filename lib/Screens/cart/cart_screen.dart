@@ -15,6 +15,8 @@ class CartScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: buildAppBar(context),
+      // bottomNavigationBar:
+
       body: BlocBuilder<CartBloc, CartState>(
         builder: (context, state) {
           if (state is CartLoading) {
@@ -32,41 +34,6 @@ class CartScreen extends StatelessWidget {
                       Text(
                         state.cart.freeDeliveryString,
                         style: Theme.of(context).textTheme.headline5,
-                      ),
-                      ElevatedButton(
-                        onPressed: () async {
-                          for (int i = 0;
-                              i <
-                                  state.cart
-                                      .productQuantity(state.cart.products)
-                                      .keys
-                                      .length;
-                              i++) {
-                            prods.add(state.cart
-                                .productQuantity(state.cart.products)
-                                .keys
-                                .elementAt(i));
-                          }
-                          // print(prods);
-                          Future.delayed(Duration(seconds: 2), () async {
-                            // 5s over, navigate to a new page
-                            await _sendCartData(context, prods);
-                          });
-
-                          // Navigator.pushNamed(context, '/');
-                        },
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.black,
-                          shape: RoundedRectangleBorder(),
-                          elevation: 0,
-                        ),
-                        child: Text(
-                          'Add More Items',
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline5!
-                              .copyWith(color: Colors.white),
-                        ),
                       ),
                     ],
                   ),
@@ -92,6 +59,44 @@ class CartScreen extends StatelessWidget {
                         }),
                   ),
                   Expanded(child: SizedBox(height: 200, child: OrderSummary())),
+                  Container(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        for (int i = 0;
+                            i <
+                                state.cart
+                                    .productQuantity(state.cart.products)
+                                    .keys
+                                    .length;
+                            i++) {
+                          prods.add(state.cart
+                              .productQuantity(state.cart.products)
+                              .keys
+                              .elementAt(i));
+                        }
+                        // print(prods);
+                        Future.delayed(Duration(seconds: 2), () async {
+                          // 5s over, navigate to a new page
+                          await _sendCartData(context, prods);
+                        });
+
+                        Navigator.pushNamed(context, '/checkout');
+                      },
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.black,
+                        shape: RoundedRectangleBorder(),
+                        elevation: 0,
+                      ),
+                      child: Text(
+                        'Checkout',
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline5!
+                            .copyWith(color: Colors.white),
+                      ),
+                    ),
+                  )
                 ],
               ),
             );
@@ -110,9 +115,16 @@ class CartScreen extends StatelessWidget {
             "Your Cart",
             style: TextStyle(color: Colors.black),
           ),
-          Text(
-            "${demoCarts.length} items",
-            style: Theme.of(context).textTheme.caption,
+          BlocBuilder<CartBloc, CartState>(
+            builder: (context, state) {
+              if (state is CartLoaded) {
+                return Text(
+                  "${state.cart.productQuantity(state.cart.products).keys.length} items",
+                  style: Theme.of(context).textTheme.caption,
+                );
+              }
+              return Text("0 Items");
+            },
           ),
         ],
       ),

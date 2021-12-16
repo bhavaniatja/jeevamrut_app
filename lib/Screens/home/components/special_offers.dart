@@ -17,8 +17,8 @@ class SpecialOffers extends StatelessWidget {
           child: SectionTitle(
             title: "Special for you",
             press: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => CategoriesScreen()));
+              //   Navigator.push(context,
+              //       MaterialPageRoute(builder: (context) => CategoriesScreen()));
             },
           ),
         ),
@@ -32,10 +32,10 @@ class SpecialOffers extends StatelessWidget {
                 category: "Fruits",
                 numOfBrands: 18,
                 press: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const CategoriesScreen()));
+                  //   Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(
+                  //           builder: (context) => const CategoriesScreen()));
                 },
               ),
               SpecialOfferCard(
@@ -43,10 +43,10 @@ class SpecialOffers extends StatelessWidget {
                 category: "Vegetables",
                 numOfBrands: 24,
                 press: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const CategoriesScreen()));
+                  //   Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(
+                  //           builder: (context) => const CategoriesScreen()));
                 },
               ),
               SizedBox(width: 20),

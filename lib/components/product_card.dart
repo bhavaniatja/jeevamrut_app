@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:jeevamrut_app/models/Product.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:jeevamrut_app/bloc/cart/cart_bloc.dart';
 import 'package:jeevamrut_app/Screens/product_detail.dart';
+import 'package:jeevamrut_app/models/product_response.dart';
 
 import '../constants.dart';
 import '../size_config.dart';
@@ -15,7 +16,7 @@ class ProductCard extends StatelessWidget {
   }) : super(key: key);
 
   final double width, aspectRetio;
-  final Product product;
+  final ProductResponse product;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +26,7 @@ class ProductCard extends StatelessWidget {
         width: width,
         child: GestureDetector(
           onTap: () => Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const ProductDetail())),
+              MaterialPageRoute(builder: (context) => ProductDetail(product))),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -39,13 +40,16 @@ class ProductCard extends StatelessWidget {
                   ),
                   child: Hero(
                     tag: product.id.toString(),
-                    child: Image.asset(product.image!),
+                    child: Image.network(
+                      product.productImage!.imageUrl!,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
               ),
               const SizedBox(height: 10),
               Text(
-                product.title!,
+                product.name!,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(color: Colors.black),
                 maxLines: 2,
@@ -61,26 +65,20 @@ class ProductCard extends StatelessWidget {
                       color: kPrimaryColor,
                     ),
                   ),
-                  InkWell(
-                    borderRadius: BorderRadius.circular(50),
-                    onTap: () {},
-                    child: Container(
-                      padding: EdgeInsets.all(8),
-                      height: 28,
-                      width: 28,
-                      decoration: BoxDecoration(
-                        color: product.isFavourite
-                            ? kPrimaryColor.withOpacity(0.15)
-                            : kSecondaryColor.withOpacity(0.1),
-                        shape: BoxShape.circle,
-                      ),
-                      child: SvgPicture.asset(
-                        "assets/icons/Heart Icon_2.svg",
-                        color: product.isFavourite
-                            ? Color(0xFFFF4848)
-                            : Color(0xFFDBDEE4),
-                      ),
+                  IconButton(
+                    icon: Icon(
+                      Icons.add_circle,
+                      color: Colors.black,
                     ),
+                    onPressed: () {
+                      final snackBar = SnackBar(
+                        content: Text('Added to your Cart!'),
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      context.read<CartBloc>().add(
+                            CartProductAdded(product),
+                          );
+                    },
                   ),
                 ],
               )

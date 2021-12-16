@@ -19,8 +19,8 @@ class HomeHeader extends StatelessWidget {
           const Expanded(flex: 3, child: SearchField()),
           IconBtnWithCounter(
             svgSrc: "assets/icons/Cart Icon.svg",
-            press: () => Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const CartScreen())),
+            press: () => Navigator.push(
+                context, MaterialPageRoute(builder: (context) => CartScreen())),
           ),
         ],
       ),

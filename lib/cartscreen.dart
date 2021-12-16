@@ -1,20 +1,19 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:jeevamrut_app/Screens/cart/components/cart_product_card.dart';
-import 'package:jeevamrut_app/Screens/cart/components/order_summary.dart';
 import 'package:jeevamrut_app/bloc/cart/cart_bloc.dart';
-import 'package:jeevamrut_app/models/Cart.dart';
-import 'package:http/http.dart' as http;
+
+import 'Screens/cart/components/cart_product_card.dart';
+import 'Screens/cart/components/order_summary.dart';
 
 class CartScreen extends StatelessWidget {
-  CartScreen({Key? key}) : super(key: key);
   static const String routeName = '/cart';
-  final prods = [];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBar(context),
+      appBar: AppBar(
+        title: Text("Cart"),
+      ),
       body: BlocBuilder<CartBloc, CartState>(
         builder: (context, state) {
           if (state is CartLoading) {
@@ -34,26 +33,8 @@ class CartScreen extends StatelessWidget {
                         style: Theme.of(context).textTheme.headline5,
                       ),
                       ElevatedButton(
-                        onPressed: () async {
-                          for (int i = 0;
-                              i <
-                                  state.cart
-                                      .productQuantity(state.cart.products)
-                                      .keys
-                                      .length;
-                              i++) {
-                            prods.add(state.cart
-                                .productQuantity(state.cart.products)
-                                .keys
-                                .elementAt(i));
-                          }
-                          // print(prods);
-                          Future.delayed(Duration(seconds: 2), () async {
-                            // 5s over, navigate to a new page
-                            await _sendCartData(context, prods);
-                          });
-
-                          // Navigator.pushNamed(context, '/');
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/');
                         },
                         style: ElevatedButton.styleFrom(
                           primary: Colors.black,
@@ -101,55 +82,4 @@ class CartScreen extends StatelessWidget {
       ),
     );
   }
-
-  AppBar buildAppBar(BuildContext context) {
-    return AppBar(
-      title: Column(
-        children: [
-          Text(
-            "Your Cart",
-            style: TextStyle(color: Colors.black),
-          ),
-          Text(
-            "${demoCarts.length} items",
-            style: Theme.of(context).textTheme.caption,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Future<void> _sendCartData(BuildContext context, List data) async {
-    final response;
-    print(data);
-    const String endPoint = "http://192.168.1.17:3000/process";
-    final Uri url = Uri.parse(endPoint);
-    Map body = {
-      "customer": "447d69f2-35e0-41ce-b785-d0ec4a8b650d",
-      "products": data
-    };
-    try {
-      response = await http.post(
-        url,
-        body: json.encode(body),
-        headers: {"Content-Type": "application/json"},
-      );
-      var data = response.body;
-      print(data);
-      if (response.statusCode == 200) {
-        print("jii");
-      }
-    } on Exception catch (e) {
-      print(e);
-      throw e;
-    }
-  }
-
-  // void _sendCartList(State state) {
-  //   BlocListener<CartBloc, CartState>(listener,: (context, state) {
-  //     if (state is CartLoaded) {
-
-  //     return null;
-  //   });
-  // }
 }

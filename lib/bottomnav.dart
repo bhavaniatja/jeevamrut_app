@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:jeevamrut_app/Screens/cart/cart_screen.dart';
 import 'package:jeevamrut_app/Screens/categories/categories_screen.dart';
 import 'package:jeevamrut_app/Screens/home/home_screen.dart';
 import 'package:jeevamrut_app/Screens/orders/orders_screen.dart';
 import 'package:jeevamrut_app/Screens/product_detail.dart';
-import 'package:jeevamrut_app/Screens/productgrid/product_grid.dart';
+
 import 'package:jeevamrut_app/Screens/profile/profile_screen.dart';
-import 'package:jeevamrut_app/cubit/app_cubits_cubit.dart';
 import 'package:jeevamrut_app/repositories/product_repository.dart';
 import 'package:provider/src/provider.dart';
 
@@ -20,9 +20,9 @@ class _BottomNavState extends State<BottomNav> {
   int currentIndex = 0;
   List screens = [
     const HomeScreen(),
-    const ProductDetail(),
+    CartScreen(),
     const OrdersScreen(),
-    const ProfileScreen(),
+    ProfileScreen(),
   ];
   @override
   Widget build(BuildContext context) {

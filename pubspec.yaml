@@ -36,6 +36,9 @@ dependencies:
     sdk: flutter
   flutter_bloc: ^8.0.0
   flutter_svg: ^0.22.0
+  geolocator: ^7.0.3
+  geocoding:
+  fluttertoast:
   http: ^0.13.4
   im_stepper: ^0.1.2+10
   shared_preferences: ^2.0.11

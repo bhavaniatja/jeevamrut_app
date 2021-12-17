@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jeevamrut_app/Screens/cart/components/cart_product_card.dart';
 import 'package:jeevamrut_app/Screens/cart/components/order_summary.dart';
+import 'package:jeevamrut_app/bloc/address/address_bloc.dart';
 import 'package:jeevamrut_app/bloc/cart/cart_bloc.dart';
 import 'package:jeevamrut_app/models/Cart.dart';
 import 'package:http/http.dart' as http;
@@ -15,14 +16,23 @@ class CartScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: buildAppBar(context),
-      // bottomNavigationBar:
-
+      bottomNavigationBar: _buildCheckoutButton(context),
       body: BlocBuilder<CartBloc, CartState>(
         builder: (context, state) {
           if (state is CartLoading) {
             return CircularProgressIndicator();
           }
+
           if (state is CartLoaded) {
+            if (state.cart.productQuantity(state.cart.products).keys.isEmpty) {
+              return Center(
+                child: Container(
+                    child: Text("Nothing in Cart",
+                        style: TextStyle(
+                          fontSize: 30,
+                        ))),
+              );
+            }
             return Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
@@ -39,7 +49,11 @@ class CartScreen extends StatelessWidget {
                   ),
                   SizedBox(height: 20),
                   SizedBox(
-                    height: 300,
+                    height: state.cart
+                            .productQuantity(state.cart.products)
+                            .keys
+                            .length *
+                        100.0,
                     child: ListView.builder(
                         itemCount: state.cart
                             .productQuantity(state.cart.products)
@@ -58,45 +72,6 @@ class CartScreen extends StatelessWidget {
                           );
                         }),
                   ),
-                  Expanded(child: SizedBox(height: 200, child: OrderSummary())),
-                  Container(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        for (int i = 0;
-                            i <
-                                state.cart
-                                    .productQuantity(state.cart.products)
-                                    .keys
-                                    .length;
-                            i++) {
-                          prods.add(state.cart
-                              .productQuantity(state.cart.products)
-                              .keys
-                              .elementAt(i));
-                        }
-                        // print(prods);
-                        Future.delayed(Duration(seconds: 2), () async {
-                          // 5s over, navigate to a new page
-                          await _sendCartData(context, prods);
-                        });
-
-                        Navigator.pushNamed(context, '/checkout');
-                      },
-                      style: ElevatedButton.styleFrom(
-                        primary: Colors.black,
-                        shape: RoundedRectangleBorder(),
-                        elevation: 0,
-                      ),
-                      child: Text(
-                        'Checkout',
-                        style: Theme.of(context)
-                            .textTheme
-                            .headline5!
-                            .copyWith(color: Colors.white),
-                      ),
-                    ),
-                  )
                 ],
               ),
             );
@@ -128,6 +103,58 @@ class CartScreen extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildCheckoutButton(BuildContext context) {
+    return BlocBuilder<CartBloc, CartState>(
+      builder: (context, state) {
+        if (state is CartLoaded) {
+          return Container(
+            width: double.infinity,
+            margin: EdgeInsets.only(bottom: 10, left: 5, right: 5),
+            child: ElevatedButton(
+              onPressed: () async {
+                for (int i = 0;
+                    i <
+                        state.cart
+                            .productQuantity(state.cart.products)
+                            .keys
+                            .length;
+                    i++) {
+                  prods.add(state.cart
+                      .productQuantity(state.cart.products)
+                      .keys
+                      .elementAt(i));
+                }
+                // print(prods);
+                Future.delayed(Duration(seconds: 2), () async {
+                  // 5s over, navigate to a new page
+                  await _sendCartData(context, prods);
+                });
+                BlocProvider.of<AddressBloc>(context).add(LoadAddress());
+                Navigator.pushNamed(context, '/checkout');
+              },
+              style: ElevatedButton.styleFrom(
+                primary: Colors.green,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all((Radius.circular(8))),
+                ),
+                elevation: 0,
+                padding: EdgeInsets.all(8),
+              ),
+              child: Text(
+                'Checkout',
+                style: Theme.of(context)
+                    .textTheme
+                    .headline5!
+                    .copyWith(color: Colors.white),
+              ),
+            ),
+          );
+        }
+        return Center(child: Text("ADD SOMETHING"));
+      },
     );
   }
 

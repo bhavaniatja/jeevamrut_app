@@ -42,7 +42,7 @@ class _BottomNavState extends State<BottomNav> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.shopping_cart),
-            label: 'Checkout',
+            label: 'Cart',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.shopping_bag),

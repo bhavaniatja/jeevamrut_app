@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
+import 'package:jeevamrut_app/bottomnav.dart';
 import 'package:jeevamrut_app/models/firebaseuser.dart';
 import 'package:jeevamrut_app/services/auth.dart';
 
@@ -154,6 +155,35 @@ class _CheckScreenState extends State<CheckScreen> {
                     },
                     child: const Text(
                       "Get Otp",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontFamily: 'Poppins-Medium.ttf',
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    color: const Color(0xFFBC1F26),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                        side: const BorderSide(color: Color(0xFFBC1F26))),
+                  ),
+                  decoration: const BoxDecoration(
+                      shape: BoxShape.circle, color: Color(0xFFF2F3F7)),
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                Container(
+                  width: double.infinity,
+                  // ignore: deprecated_member_use
+                  child: RaisedButton(
+                    padding: const EdgeInsets.all(17.0),
+                    onPressed: () async {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => BottomNav()));
+                    },
+                    child: const Text(
+                      "Guest Login",
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 18,

@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:jeevamrut_app/Authenticate/check.dart';
 import 'package:jeevamrut_app/Screens/checkout/components/payment_options.dart';
 import 'package:jeevamrut_app/Screens/ordersuccess/order_success_screen.dart';
 import 'package:jeevamrut_app/Screens/profile/components/single_delivery_address.dart';
+import 'package:jeevamrut_app/Screens/splash.dart';
 import 'package:jeevamrut_app/bloc/address/address_bloc.dart';
 import 'package:jeevamrut_app/bloc/cart/cart_bloc.dart';
 import 'package:jeevamrut_app/models/Cart.dart';
+import 'package:jeevamrut_app/models/firebaseuser.dart';
+import 'package:jeevamrut_app/wrapper.dart';
+import 'package:provider/provider.dart';
 
 import '../../cart_product_card.dart';
 import '../../order_summary.dart';
@@ -17,9 +22,12 @@ class CheckOutScreen extends StatelessWidget {
   final prods = [];
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<FirebaseUser?>(context);
     return Scaffold(
       appBar: buildAppBar(context),
-      bottomNavigationBar: _buildPaymentButton(context),
+      bottomNavigationBar: user == null
+          ? _buildLoginButton(context)
+          : _buildPaymentButton(context),
       body: BlocBuilder<CartBloc, CartState>(
         builder: (context, state) {
           if (state is CartLoading) {
@@ -73,31 +81,37 @@ class CheckOutScreen extends StatelessWidget {
                               );
                             }),
                       ),
-                      BlocBuilder<AddressBloc, AddressState>(
-                        builder: (context, state) {
-                          if (state is AddressLoaded) {
-                            return Column(
-                              children: [
-                                ListTile(
-                                  title: Text("Deliver To"),
-                                ),
-                                Divider(
-                                  height: 1,
-                                ),
-                                Column(children: [
-                                  SingleDeliveryItem(
-                                      address: '${state.Address.city}',
-                                      title: '${state.Address.createdBy}',
-                                      number: '${state.Address.mobile}',
-                                      addressType: '${state.Address.type}')
-                                ]),
-                              ],
-                            );
-                          } else {
-                            return SizedBox();
-                          }
-                        },
-                      ),
+                      user == null
+                          ? Text(
+                              "Login to Add Address",
+                              style: TextStyle(fontSize: 30),
+                            )
+                          : BlocBuilder<AddressBloc, AddressState>(
+                              builder: (context, state) {
+                                if (state is AddressLoaded) {
+                                  return Column(
+                                    children: [
+                                      ListTile(
+                                        title: Text("Deliver To"),
+                                      ),
+                                      Divider(
+                                        height: 1,
+                                      ),
+                                      Column(children: [
+                                        SingleDeliveryItem(
+                                            address: '${state.Address.city}',
+                                            title: '${state.Address.createdBy}',
+                                            number: '${state.Address.mobile}',
+                                            addressType:
+                                                '${state.Address.type}')
+                                      ]),
+                                    ],
+                                  );
+                                } else {
+                                  return SizedBox();
+                                }
+                              },
+                            ),
                       PaymentOption(),
                       SizedBox(height: 200, child: OrderSummary()),
                     ],
@@ -135,6 +149,20 @@ class CheckOutScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+Widget _buildLoginButton(BuildContext context) {
+  return ElevatedButton(
+    onPressed: () {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => Wrapper()));
+    },
+    child: Text("Login"),
+    style: ElevatedButton.styleFrom(
+        primary: Colors.purple,
+        padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+        textStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+  );
 }
 
 Widget _buildPaymentButton(BuildContext context) {

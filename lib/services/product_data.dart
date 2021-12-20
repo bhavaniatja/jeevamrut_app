@@ -4,7 +4,7 @@ class HttpService {
   static Future<http.Response> getRequest() async {
     http.Response response;
 
-    final url = Uri.parse("http://192.168.1.5:3000");
+    final url = Uri.parse("https://jsonkeeper.com/b/7AZX");
     try {
       response = await http.get(url);
       // print(response);
@@ -29,3 +29,4 @@ class HttpService {
     return response;
   }
 }
+//https://jsonkeeper.com/b/7AZX

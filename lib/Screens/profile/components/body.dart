@@ -6,6 +6,9 @@ import 'package:jeevamrut_app/Screens/profile/components/account_details.dart';
 import 'package:jeevamrut_app/Screens/profile/components/address_details.dart';
 import 'package:jeevamrut_app/Screens/wallet/wallet_screen.dart';
 import 'package:jeevamrut_app/bloc/address/address_bloc.dart';
+import 'package:jeevamrut_app/bloc/bloc/product_bloc.dart';
+import 'package:jeevamrut_app/bloc/cart/cart_bloc.dart';
+import 'package:jeevamrut_app/bloc/pincode/pincode_bloc.dart';
 import 'package:jeevamrut_app/services/auth.dart';
 import 'package:jeevamrut_app/wrapper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -85,9 +88,14 @@ class Body extends StatelessWidget {
 
 Future<void> _signOut(BuildContext context) async {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final preferences = await SharedPreferences.getInstance();
-  preferences.clear();
-  await _auth.signOut().then((_) {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => Wrapper()));
-  });
+  SharedPreferences preferences = await SharedPreferences.getInstance();
+  await preferences.clear();
+  BlocProvider.of<PincodeBloc>(context).add(PincodeInitEvent());
+  BlocProvider.of<CartBloc>(context).add(CartStarted());
+  // await preferences.remove('pincode');
+  // await preferences.remove('cart');
+  await _auth.signOut();
+  //.then((_) {
+  //   Navigator.push(context, MaterialPageRoute(builder: (context) => Wrapper()));
+  // });
 }

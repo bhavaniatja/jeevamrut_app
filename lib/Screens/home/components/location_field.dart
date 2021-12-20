@@ -4,6 +4,7 @@ import 'package:jeevamrut_app/bloc/pincode/pincode_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LocationField extends StatefulWidget {
   const LocationField({Key? key}) : super(key: key);
@@ -14,7 +15,8 @@ class LocationField extends StatefulWidget {
 
 class _LocationFieldState extends State<LocationField> {
   final _textEditingController = TextEditingController();
-  String value = "Your Pincode";
+  String value = "";
+
   @override
   void dispose() {
     // Clean up the controller when the Widget is disposed
@@ -24,9 +26,10 @@ class _LocationFieldState extends State<LocationField> {
 
   @override
   void initState() {
+    _checkPincode();
     _textEditingController.addListener(() {
       //here you have the changes of your textfield
-      print("value: ${_textEditingController.text}");
+      // print("value: ${_textEditingController.text}");
       //use setState to rebuild the widget
       setState(() {
         value = _textEditingController.text;
@@ -49,7 +52,7 @@ class _LocationFieldState extends State<LocationField> {
         child: BlocBuilder<PincodeBloc, PincodeState>(
           builder: (context, state) {
             if (state is PincodeInitial || state is PincodeEditState) {
-              return TextField(
+              return const TextField(
                 enabled: false,
                 decoration: InputDecoration(
                   contentPadding: EdgeInsets.symmetric(vertical: 20),
@@ -172,7 +175,8 @@ class _LocationFieldState extends State<LocationField> {
                       if (state is PincodeEditedState) {
                         return TextField(
                           keyboardType: TextInputType.number,
-                          controller: _textEditingController,
+                          controller: _textEditingController
+                            ..text = state.pincode,
                           decoration: InputDecoration(
                             contentPadding: EdgeInsets.symmetric(vertical: 20),
                             border: InputBorder.none,
@@ -187,12 +191,15 @@ class _LocationFieldState extends State<LocationField> {
                     },
                   ),
                   ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
                         print(value);
                         BlocProvider.of<PincodeBloc>(context)
                             .add(PincodeInitEvent());
                         BlocProvider.of<PincodeBloc>(context)
                             .add(PincodeEditedEvent(value));
+                        final preferences =
+                            await SharedPreferences.getInstance();
+                        await preferences.setString('pincode', value);
                         Navigator.of(context).pop();
                       },
                       child: Text("Submit")),
@@ -201,9 +208,10 @@ class _LocationFieldState extends State<LocationField> {
                         String getpin = await _determinePosition();
                         // BlocProvider.of<PincodeBloc>(context)
                         //     .add(PincodeInitEvent());
+                        Future.delayed(Duration(seconds: 1));
                         BlocProvider.of<PincodeBloc>(context)
                             .add(PincodeEditEvent(getpin));
-                        print(_determinePosition());
+                        // print(_determinePosition());
                       },
                       child: Text("Detect")),
                 ],
@@ -211,5 +219,14 @@ class _LocationFieldState extends State<LocationField> {
             ),
           );
         });
+  }
+
+  Future _checkPincode() async {
+    final preferences = await SharedPreferences.getInstance();
+    // print(preferences.getString('pincode'));
+    if (preferences.containsKey('pincode')) {
+      String? str = preferences.getString('pincode');
+      BlocProvider.of<PincodeBloc>(context).add(PincodeEditedEvent(str!));
+    }
   }
 }

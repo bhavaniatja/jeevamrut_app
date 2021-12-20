@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:jeevamrut_app/bloc/bloc/product_bloc.dart';
 import 'package:jeevamrut_app/models/cart_response.dart';
 import 'package:jeevamrut_app/models/product_response.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 part 'cart_event.dart';
 part 'cart_state.dart';
@@ -13,12 +16,15 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     // add(CartStarted());
     on<CartStarted>((event, emit) {
       emit(CartLoaded());
-      print(state);
+      // print(state);
     });
+    // on<CartTrigger>((event, emit) {
+    //   emit(CartLoaded(cart: Cart(products: event.products)));
+    // });
     on<CartProductAdded>((event, Emitter<CartState> emit) {
       _checkAdded(event, emit);
     });
-    on<CartProductRemoved>((event, emit) {
+    on<CartProductRemoved>((event, emit) async {
       try {
         emit(CartLoaded(
           cart: Cart(
@@ -26,19 +32,35 @@ class CartBloc extends Bloc<CartEvent, CartState> {
               ..remove(event.product),
           ),
         ));
-        print((state as CartLoaded).cart.products);
+        // Future.delayed(Duration(seconds: 1));
+        await _addData();
       } on Exception {
         emit(CartError());
       }
     });
   }
-  void _checkAdded(CartProductAdded event, Emitter<CartState> emit) {
+  void _checkAdded(CartProductAdded event, Emitter<CartState> emit) async {
     emit(CartLoaded(
       cart: Cart(
         products: List.from((state as CartLoaded).cart.products)
           ..add(event.product),
       ),
     ));
-    print((state as CartLoaded).cart.products);
+    // Future.delayed(Duration(seconds: 1));
+    await _addData();
+
+    // print(pref.getStringList('cart'));
+  }
+
+  Future<void> _addData() async {
+    List<String> list = [];
+    var data = (state as CartLoaded).cart.products;
+    for (var da in data) {
+      list.add(json.encode(da));
+    }
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.setStringList('cart', list);
+    List<String> lst = pref.getStringList('cart')!;
+    // print(lst);
   }
 }

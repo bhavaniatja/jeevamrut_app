@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:equatable/equatable.dart';
 
 import 'package:jeevamrut_app/models/product_response.dart';
@@ -12,15 +14,15 @@ class Cart extends Equatable {
 
   Map productQuantity(products) {
     var quantity = Map();
-
     products.forEach((product) {
       if (!quantity.containsKey(product)) {
         quantity[product] = 1;
       } else {
         quantity[product] += 1;
       }
+      // print(json.decode(product)["id"]);
     });
-
+    // print(quantity.keys.length);
     return quantity;
   }
 

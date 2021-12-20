@@ -45,10 +45,16 @@ class CheckOutScreen extends StatelessWidget {
                       SizedBox(height: 20),
                       SizedBox(
                         height: state.cart
-                                .productQuantity(state.cart.products)
-                                .keys
-                                .length *
-                            100.0,
+                                    .productQuantity(state.cart.products)
+                                    .keys
+                                    .length <
+                                4
+                            ? state.cart
+                                    .productQuantity(state.cart.products)
+                                    .keys
+                                    .length *
+                                100.0
+                            : 400,
                         child: ListView.builder(
                             itemCount: state.cart
                                 .productQuantity(state.cart.products)

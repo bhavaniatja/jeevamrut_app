@@ -1,6 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jeevamrut_app/Authenticate/check.dart';
+import 'package:jeevamrut_app/bloc/cart/cart_bloc.dart';
+import 'package:jeevamrut_app/models/product_response.dart';
 import 'package:jeevamrut_app/wrapper.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -14,6 +20,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
+    _getCartData();
     _navigatetohome();
   }
 
@@ -34,5 +41,22 @@ class _SplashScreenState extends State<SplashScreen> {
         ],
       ),
     ));
+  }
+
+  Future<void> _getCartData() async {
+    final preferences = await SharedPreferences.getInstance();
+    if (preferences.containsKey('cart')) {
+      print("Yes");
+      var productsList = <ProductResponse>[];
+      List<String> list = preferences.getStringList('cart')!;
+      for (var prod in list) {
+        var productdata = json.decode(prod);
+        ProductResponse pro = ProductResponse.fromJson(productdata);
+        print(pro.id);
+        BlocProvider.of<CartBloc>(context)
+            .add(CartProductAdded(ProductResponse.fromJson(productdata)));
+      }
+      // BlocProvider.of<CartBloc>(context).add(CartTrigger(productsList));
+    }
   }
 }

@@ -4,10 +4,10 @@ class HttpService {
   static Future<http.Response> getRequest() async {
     http.Response response;
 
-    final url = Uri.parse("http://192.168.1.17:3000");
+    final url = Uri.parse("http://192.168.1.5:3000");
     try {
       response = await http.get(url);
-      print(response);
+      // print(response);
     } on Exception catch (e) {
       throw e;
     }

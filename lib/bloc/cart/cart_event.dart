@@ -27,3 +27,10 @@ class CartProductRemoved extends CartEvent {
   @override
   List<Object> get props => [product];
 }
+
+class CartTrigger extends CartEvent {
+  final List<ProductResponse> products;
+  const CartTrigger(this.products);
+  @override
+  List<Object> get props => [products];
+}

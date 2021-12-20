@@ -88,6 +88,7 @@ class _CheckScreenState extends State<CheckScreen> {
                 ),
                 TextField(
                   controller: phoneController,
+                  keyboardType: TextInputType.number,
                   showCursor: true,
                   decoration: InputDecoration(
                     border: const OutlineInputBorder(
@@ -213,6 +214,7 @@ class _CheckScreenState extends State<CheckScreen> {
               ),
               TextField(
                 controller: otpController,
+                keyboardType: TextInputType.number,
                 showCursor: true,
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(

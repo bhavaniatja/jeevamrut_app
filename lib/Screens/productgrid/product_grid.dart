@@ -30,7 +30,7 @@ class ProdcutGridScreen extends StatelessWidget {
             icon:
                 const Icon(Icons.notifications_none, color: Color(0xFF545D68)),
             onPressed: () {
-              print(this.productData?[0].description);
+              // print(this.productData?[0].description);
             },
           ),
         ],

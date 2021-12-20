@@ -7,6 +7,7 @@ import 'package:jeevamrut_app/bloc/address/address_bloc.dart';
 import 'package:jeevamrut_app/bloc/cart/cart_bloc.dart';
 import 'package:jeevamrut_app/models/Cart.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CartScreen extends StatelessWidget {
   CartScreen({Key? key}) : super(key: key);
@@ -36,41 +37,51 @@ class CartScreen extends StatelessWidget {
             return Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-              child: Column(
+              child: ListView(
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  Column(
                     children: [
-                      Text(
-                        state.cart.freeDeliveryString,
-                        style: Theme.of(context).textTheme.headline5,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            state.cart.freeDeliveryString,
+                            style: Theme.of(context).textTheme.headline5,
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                  SizedBox(height: 20),
-                  SizedBox(
-                    height: state.cart
-                            .productQuantity(state.cart.products)
-                            .keys
-                            .length *
-                        100.0,
-                    child: ListView.builder(
-                        itemCount: state.cart
-                            .productQuantity(state.cart.products)
-                            .keys
-                            .length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return CartProductCard(
-                            product: state.cart
+                      SizedBox(height: 20),
+                      SizedBox(
+                        height: state.cart
+                                    .productQuantity(state.cart.products)
+                                    .keys
+                                    .length <
+                                4
+                            ? state.cart
+                                    .productQuantity(state.cart.products)
+                                    .keys
+                                    .length *
+                                100.0
+                            : 400,
+                        child: ListView.builder(
+                            itemCount: state.cart
                                 .productQuantity(state.cart.products)
                                 .keys
-                                .elementAt(index),
-                            quantity: state.cart
-                                .productQuantity(state.cart.products)
-                                .values
-                                .elementAt(index),
-                          );
-                        }),
+                                .length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return CartProductCard(
+                                product: state.cart
+                                    .productQuantity(state.cart.products)
+                                    .keys
+                                    .elementAt(index),
+                                quantity: state.cart
+                                    .productQuantity(state.cart.products)
+                                    .values
+                                    .elementAt(index),
+                              );
+                            }),
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -160,8 +171,8 @@ class CartScreen extends StatelessWidget {
 
   Future<void> _sendCartData(BuildContext context, List data) async {
     final response;
-    print(data);
-    const String endPoint = "http://192.168.1.17:3000/process";
+    // print(data);
+    const String endPoint = "http://192.168.43.174:3000/process";
     final Uri url = Uri.parse(endPoint);
     Map body = {
       "customer": "447d69f2-35e0-41ce-b785-d0ec4a8b650d",

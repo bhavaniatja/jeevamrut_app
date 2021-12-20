@@ -8,6 +8,7 @@ import 'package:jeevamrut_app/Screens/wallet/wallet_screen.dart';
 import 'package:jeevamrut_app/bloc/address/address_bloc.dart';
 import 'package:jeevamrut_app/services/auth.dart';
 import 'package:jeevamrut_app/wrapper.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'profile_menu.dart';
 import 'profile_pic.dart';
@@ -84,6 +85,8 @@ class Body extends StatelessWidget {
 
 Future<void> _signOut(BuildContext context) async {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final preferences = await SharedPreferences.getInstance();
+  preferences.clear();
   await _auth.signOut().then((_) {
     Navigator.push(context, MaterialPageRoute(builder: (context) => Wrapper()));
   });

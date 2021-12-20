@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jeevamrut_app/Screens/cart/cart_screen.dart';
+import 'package:jeevamrut_app/bloc/cart/cart_bloc.dart';
 
 import 'icon_btn_with_counter.dart';
 import 'search_field.dart';
@@ -17,10 +19,26 @@ class HomeHeader extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           const Expanded(flex: 3, child: SearchField()),
-          IconBtnWithCounter(
-            svgSrc: "assets/icons/Cart Icon.svg",
-            press: () => Navigator.push(
-                context, MaterialPageRoute(builder: (context) => CartScreen())),
+          BlocBuilder<CartBloc, CartState>(
+            builder: (context, state) {
+              if (state is CartLoaded) {
+                return IconBtnWithCounter(
+                  svgSrc: "assets/icons/Cart Icon.svg",
+                  numOfitem: state.cart
+                      .productQuantity(state.cart.products)
+                      .keys
+                      .length,
+                  press: () => Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => CartScreen())),
+                );
+              }
+              return IconBtnWithCounter(
+                svgSrc: "assets/icons/Cart Icon.svg",
+                numOfitem: 0,
+                press: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => CartScreen())),
+              );
+            },
           ),
         ],
       ),

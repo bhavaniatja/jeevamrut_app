@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jeevamrut_app/bloc/cart/cart_bloc.dart';
 import 'package:jeevamrut_app/Screens/product_detail.dart';
 import 'package:jeevamrut_app/models/product_response.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../constants.dart';
 import '../size_config.dart';
@@ -23,9 +26,6 @@ class ProductCard extends StatefulWidget {
 }
 
 class _ProductCardState extends State<ProductCard> {
-  // int quantity = 0;
-  // bool productInCart = false;
-  // late int index;
   @override
   Widget build(BuildContext context) {
     return Padding(

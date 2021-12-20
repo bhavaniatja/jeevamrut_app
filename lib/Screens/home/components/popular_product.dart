@@ -10,6 +10,7 @@ import 'section_title.dart';
 class PopularProducts extends StatelessWidget {
   const PopularProducts(this.products, {Key? key}) : super(key: key);
   final List<ProductResponse> products;
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ProductBloc, ProductState>(

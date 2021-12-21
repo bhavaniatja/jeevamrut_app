@@ -31,16 +31,20 @@ dependencies:
   cupertino_icons: ^1.0.2
   equatable: ^2.0.3
   firebase_auth: ^3.2.0
+  firebase_storage: ^10.2.4
+  cloud_firestore: ^2.4.0
   firebase_core: ^1.10.0
   flutter:
     sdk: flutter
   flutter_bloc: ^8.0.0
   flutter_svg: ^0.22.0
+  image_picker: ^0.8.4+4
+  path: ^1.8.0
+  im_stepper: ^0.1.2+10
   geolocator: ^7.0.3
   geocoding:
   fluttertoast:
   http: ^0.13.4
-  im_stepper: ^0.1.2+10
   shared_preferences: ^2.0.11
   provider: ^6.0.0
 dev_dependencies:

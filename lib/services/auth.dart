@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:jeevamrut_app/models/firebaseuser.dart';
+import 'package:jeevamrut_app/models/user_mode.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -17,8 +19,9 @@ class AuthService {
   Future signInWithPhoneAuthCredential(
       PhoneAuthCredential phoneAuthCredential) async {
     try {
-      final authCredential =
-          await _auth.signInWithCredential(phoneAuthCredential);
+      final authCredential = await _auth
+          .signInWithCredential(phoneAuthCredential)
+          .then((value) => postDetailsToFirestore());
 
       // if (authCredential.user != null) {
       // var phone = (authCredential.user!.phoneNumber).toString();
@@ -37,6 +40,24 @@ class AuthService {
     } catch (e) {
       // print(e.toString());
       return null;
+    }
+  }
+
+  postDetailsToFirestore() async {
+    FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+    User? user = FirebaseAuth.instance.currentUser;
+    var a = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user!.uid)
+        .get();
+    if (!a.exists) {
+      UserModel userModel = UserModel();
+      userModel.uid = user.uid;
+      userModel.mobile = user.phoneNumber;
+      await firebaseFirestore
+          .collection("users")
+          .doc(user.uid)
+          .set(userModel.toMap());
     }
   }
 }

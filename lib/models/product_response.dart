@@ -1,3 +1,7 @@
+// To parse this JSON data, do
+//
+//     final productResponse = productResponseFromJson(jsonString);
+
 import 'dart:convert';
 
 ProductResponse productResponseFromJson(String str) =>
@@ -10,77 +14,148 @@ class ProductResponse {
   ProductResponse({
     this.id,
     this.name,
+    this.prices,
+    this.productImage,
     this.brandName,
     this.quantity,
-    this.price,
     this.taxCategoryId,
+    this.vendorId,
     this.description,
     this.category,
     this.subCategory,
     this.manufactureDate,
     this.expiryDate,
-    this.noExpiry,
-    this.isAvailable,
+    this.available,
+    this.threshold,
+    this.pinCode,
     this.locationCategory,
     this.meta,
-    this.productImage,
+    this.createDate,
+    this.createdBy,
+    this.updatedDate,
+    this.updatedBy,
+    this.version,
   });
 
   String? id;
   String? name;
+  List<Price>? prices;
+  ProductImage? productImage;
   String? brandName;
   String? quantity;
-  int? price;
   String? taxCategoryId;
+  String? vendorId;
   String? description;
   String? category;
   String? subCategory;
   DateTime? manufactureDate;
-  dynamic expiryDate;
-  int? noExpiry;
-  int? isAvailable;
+  DateTime? expiryDate;
+  int? available;
+  int? threshold;
+  String? pinCode;
   String? locationCategory;
   String? meta;
-  ProductImage? productImage;
+  DateTime? createDate;
+  String? createdBy;
+  DateTime? updatedDate;
+  String? updatedBy;
+  String? version;
 
   factory ProductResponse.fromJson(Map<String, dynamic> json) =>
       ProductResponse(
         id: json["id"],
         name: json["name"],
-        brandName: json["brand_name"],
+        prices: List<Price>.from(json["prices"].map((x) => Price.fromJson(x))),
+        productImage: ProductImage.fromJson(json["productImage"]),
+        brandName: json["brandName"],
         quantity: json["quantity"],
-        price: json["price"],
-        taxCategoryId: json["tax_category_id"],
+        taxCategoryId: json["taxCategoryId"],
+        vendorId: json["vendorId"],
         description: json["description"],
         category: json["category"],
-        subCategory: json["sub_category"],
-        manufactureDate: DateTime.parse(json["manufacture_date"]),
-        expiryDate: json["expiry_date"],
-        noExpiry: json["no_expiry"],
-        isAvailable: json["is_available"],
-        locationCategory: json["location_category"],
+        subCategory: json["subCategory"],
+        manufactureDate: DateTime.parse(json["manufactureDate"]),
+        expiryDate: DateTime.parse(json["expiryDate"]),
+        available: json["available"],
+        threshold: json["threshold"],
+        pinCode: json["pinCode"],
+        locationCategory: json["locationCategory"],
         meta: json["meta"],
-        productImage: ProductImage.fromJson(json["product_image"]),
+        createDate: DateTime.parse(json["createDate"]),
+        createdBy: json["createdBy"],
+        updatedDate: DateTime.parse(json["updatedDate"]),
+        updatedBy: json["updatedBy"],
+        version: json["version"],
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
         "name": name,
-        "brand_name": brandName,
+        "prices": List<dynamic>.from(prices!.map((x) => x.toJson())),
+        "productImage": productImage!.toJson(),
+        "brandName": brandName,
         "quantity": quantity,
-        "price": price,
-        "tax_category_id": taxCategoryId,
+        "taxCategoryId": taxCategoryId,
+        "vendorId": vendorId,
         "description": description,
         "category": category,
-        "sub_category": subCategory,
-        "manufacture_date":
-            "${manufactureDate!.year.toString().padLeft(4, '0')}-${manufactureDate!.month.toString().padLeft(2, '0')}-${manufactureDate!.day.toString().padLeft(2, '0')}",
-        "expiry_date": expiryDate,
-        "no_expiry": noExpiry,
-        "is_available": isAvailable,
-        "location_category": locationCategory,
+        "subCategory": subCategory,
+        "manufactureDate": manufactureDate!.toIso8601String(),
+        "expiryDate": expiryDate!.toIso8601String(),
+        "available": available,
+        "threshold": threshold,
+        "pinCode": pinCode,
+        "locationCategory": locationCategory,
         "meta": meta,
-        "product_image": productImage!.toJson(),
+        "createDate": createDate!.toIso8601String(),
+        "createdBy": createdBy,
+        "updatedDate": updatedDate!.toIso8601String(),
+        "updatedBy": updatedBy,
+        "version": version,
+      };
+}
+
+class Price {
+  Price({
+    this.id,
+    this.productId,
+    this.price,
+    this.type,
+    this.createDate,
+    this.createdBy,
+    this.updatedDate,
+    this.updatedBy,
+  });
+
+  String? id;
+  dynamic? productId;
+  int? price;
+  String? type;
+  DateTime? createDate;
+  String? createdBy;
+  DateTime? updatedDate;
+  String? updatedBy;
+
+  factory Price.fromJson(Map<String, dynamic> json) => Price(
+        id: json["id"],
+        productId: json["productId"],
+        price: json["price"],
+        type: json["type"],
+        createDate: DateTime.parse(json["createDate"]),
+        createdBy: json["createdBy"],
+        updatedDate: DateTime.parse(json["updatedDate"]),
+        updatedBy: json["updatedBy"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "productId": productId,
+        "price": price,
+        "type": type,
+        "createDate": createDate!.toIso8601String(),
+        "createdBy": createdBy,
+        "updatedDate": updatedDate!.toIso8601String(),
+        "updatedBy": updatedBy,
       };
 }
 
@@ -90,24 +165,44 @@ class ProductImage {
     this.productId,
     this.imageUrl,
     this.format,
+    this.source,
+    this.createDate,
+    this.createdBy,
+    this.updatedDate,
+    this.updatedBy,
   });
 
   String? id;
-  String? productId;
+  dynamic? productId;
   String? imageUrl;
   String? format;
+  String? source;
+  DateTime? createDate;
+  String? createdBy;
+  DateTime? updatedDate;
+  String? updatedBy;
 
   factory ProductImage.fromJson(Map<String, dynamic> json) => ProductImage(
         id: json["id"],
-        productId: json["product_id"],
-        imageUrl: json["image_url"],
+        productId: json["productId"],
+        imageUrl: json["imageUrl"],
         format: json["format"],
+        source: json["source"],
+        createDate: DateTime.parse(json["createDate"]),
+        createdBy: json["createdBy"],
+        updatedDate: DateTime.parse(json["updatedDate"]),
+        updatedBy: json["updatedBy"],
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
-        "product_id": productId,
-        "image_url": imageUrl,
+        "productId": productId,
+        "imageUrl": imageUrl,
         "format": format,
+        "source": source,
+        "createDate": createDate!.toIso8601String(),
+        "createdBy": createdBy,
+        "updatedDate": updatedDate!.toIso8601String(),
+        "updatedBy": updatedBy,
       };
 }

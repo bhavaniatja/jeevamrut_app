@@ -21,8 +21,8 @@ class CartProductCard extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Image.network(
-            product.productImage!.imageUrl!,
-            fit: BoxFit.cover,
+            "${product.productImage!.imageUrl}",
+            fit: BoxFit.contain,
             width: 100,
             height: 80,
           ),
@@ -33,11 +33,18 @@ class CartProductCard extends StatelessWidget {
               children: [
                 Text(
                   product.name!,
-                  style: Theme.of(context).textTheme.headline5,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline6!
+                      .copyWith(color: Colors.black),
                 ),
                 Text(
-                  '\$${product.price}',
-                  style: Theme.of(context).textTheme.headline6,
+                  '\u20b9 ${product.prices![0].price}',
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline5!
+                      .copyWith(color: Colors.black),
                 ),
               ],
             ),
@@ -55,7 +62,7 @@ class CartProductCard extends StatelessWidget {
                       icon: Icon(Icons.remove_circle),
                       onPressed: () {
                         context.read<CartBloc>().add(
-                              CartProductRemoved(product),
+                              CartProductRemoved(product.id!),
                             );
                       },
                     ),
@@ -67,7 +74,7 @@ class CartProductCard extends StatelessWidget {
                       icon: Icon(Icons.add_circle),
                       onPressed: () {
                         context.read<CartBloc>().add(
-                              CartProductAdded(product),
+                              CartProductAdded(product.id!),
                             );
                       },
                     ),

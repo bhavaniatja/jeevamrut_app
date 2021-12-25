@@ -20,7 +20,9 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       emit((ProductLoading()));
     });
     on<LoadProducts>((event, emit) async {
-      final products = await _productRepository.getProductsFromApi();
+      print(event.pincode);
+      final products =
+          await _productRepository.getProductsFromApi(event.pincode);
       emit((ProductLoaded(products: products)));
     });
   }

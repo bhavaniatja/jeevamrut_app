@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:im_stepper/stepper.dart';
 import 'package:jeevamrut_app/Screens/cart/cart_screen.dart';
+import 'package:jeevamrut_app/Screens/home/components/icon_btn_with_counter.dart';
 import 'package:jeevamrut_app/bloc/bloc/product_bloc.dart';
 import 'package:jeevamrut_app/bloc/cart/cart_bloc.dart';
 import 'package:jeevamrut_app/models/product.dart';
@@ -20,22 +21,50 @@ class ProductDetail extends StatelessWidget {
         child: Scaffold(
           backgroundColor: Colors.white,
           appBar: AppBar(
+            backgroundColor: Colors.white,
             leading: IconButton(
               icon: Icon(Icons.arrow_back_ios),
+              color: Colors.black,
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             actions: [
-              IconButton(
-                  onPressed: () {},
-                  icon: Icon(
-                    Icons.shopping_cart_outlined,
-                    size: 30,
-                  )),
+              BlocBuilder<CartBloc, CartState>(
+                builder: (context, state) {
+                  if (state is CartLoaded) {
+                    return Container(
+                      margin: EdgeInsets.all(5),
+                      child: IconBtnWithCounter(
+                        svgSrc: "assets/icons/Cart Icon.svg",
+                        numOfitem: state.cart
+                            .productQuantity(state.cart.productIds)
+                            .keys
+                            .length,
+                        press: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => CartScreen())),
+                      ),
+                    );
+                  }
+                  return Container(
+                    margin: EdgeInsets.all(5),
+                    child: IconBtnWithCounter(
+                      svgSrc: "assets/icons/Cart Icon.svg",
+                      numOfitem: 0,
+                      press: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => CartScreen())),
+                    ),
+                  );
+                },
+              ),
             ],
             title: Text(
               "Jeevamrut",
+              style: TextStyle(color: Colors.black),
               textAlign: TextAlign.center,
             ),
           ),
@@ -45,7 +74,7 @@ class ProductDetail extends StatelessWidget {
                 Container(
                   height: 200,
                   child: Image.network(
-                    product.productImage!.imageUrl!,
+                    "${product.productImage!.imageUrl}",
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -64,13 +93,14 @@ class ProductDetail extends StatelessWidget {
                       children: [
                         Text(
                           product.name!,
+                          overflow: TextOverflow.ellipsis,
                           style: Theme.of(context)
                               .textTheme
-                              .headline5!
+                              .headline4!
                               .copyWith(color: Colors.black),
                         ),
                         Text(
-                          '\$${product.price}',
+                          '\u20b9 ${product.prices![0].price}',
                           style: Theme.of(context)
                               .textTheme
                               .headline5!
@@ -102,7 +132,7 @@ class ProductDetail extends StatelessWidget {
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(snackBar);
                               context.read<CartBloc>().add(
-                                    CartProductAdded(product),
+                                    CartProductAdded(product.id!),
                                   );
                             },
                           ),
@@ -112,37 +142,31 @@ class ProductDetail extends StatelessWidget {
                               Future.delayed(Duration(seconds: 1));
                               int ind;
                               if (state.cart
-                                  .productQuantity(state.cart.products)
+                                  .productQuantity(state.cart.productIds)
                                   .keys
-                                  .contains(product)) {
-                                // print(state.cart
-                                //     .productQuantity(state.cart.products)
-                                //     .keys
-                                //     .length);
+                                  .contains("${product.id}")) {
                                 for (int i = 0;
                                     i <
                                         state.cart
                                             .productQuantity(
-                                                state.cart.products)
+                                                state.cart.productIds)
                                             .keys
                                             .length;
                                     i++) {
                                   if (state.cart
-                                          .productQuantity(state.cart.products)
+                                          .productQuantity(
+                                              state.cart.productIds)
                                           .keys
                                           .elementAt(i) ==
-                                      product) {
+                                      product.id) {
                                     return Text(
-                                        '${state.cart.productQuantity(state.cart.products).values.elementAt(i)}');
+                                        '${state.cart.productQuantity(state.cart.productIds).values.elementAt(i)}');
                                   }
-                                  // print("yes ${i}");
                                 }
                               } else {
                                 return Text("0",
                                     style: TextStyle(fontSize: 20));
                               }
-                              // int ind = state.cart.products.indexWhere(
-                              //     (element) => element.id == widget.product.id);
                             }
                             return Text(
                               "0",
@@ -156,7 +180,7 @@ class ProductDetail extends StatelessWidget {
                             ),
                             onPressed: () {
                               context.read<CartBloc>().add(
-                                    CartProductRemoved(product),
+                                    CartProductRemoved(product.id!),
                                   );
                             },
                           ),
@@ -170,10 +194,10 @@ class ProductDetail extends StatelessWidget {
                           if (state is CartLoaded) {
                             return ElevatedButton(
                               onPressed: () {
-                                context
-                                    .read<CartBloc>()
-                                    .add(CartProductAdded(product));
-                                Navigator.pushNamed(context, '/cart');
+                                // context
+                                //     .read<CartBloc>()
+                                //     .add(CartProductAdded(product.id!));
+                                // Navigator.pushNamed(context, '/cart');
                               },
                               style: ElevatedButton.styleFrom(
                                 primary: Colors.green,
@@ -239,7 +263,7 @@ class ProductDetail extends StatelessWidget {
                               fontSize: 16,
                               fontWeight: FontWeight.w700,
                               color: Color(0xFF565656))),
-                      Text("\u20b9 ${product.price!}",
+                      Text("\u20b9 ${product.prices![0]}",
                           style: TextStyle(
                               fontFamily: 'Roboto-Light.ttf',
                               fontSize: 20,

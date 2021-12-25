@@ -28,7 +28,7 @@ class _BodyState extends State<Body> {
                 height: MediaQuery.of(context).size.height - 50.0,
                 child: _buildCard(
                     '${widget.productData![index].name}',
-                    '\u20b9 ${widget.productData![index].price}',
+                    '\u20b9 ${widget.productData![index].prices![0].price}',
                     '${widget.productData![index].productImage!.imageUrl}',
                     false,
                     false,

@@ -94,8 +94,7 @@ Future<void> _signOut(BuildContext context) async {
   BlocProvider.of<CartBloc>(context).add(CartStarted());
   // await preferences.remove('pincode');
   // await preferences.remove('cart');
-  await _auth.signOut();
-  //.then((_) {
-  //   Navigator.push(context, MaterialPageRoute(builder: (context) => Wrapper()));
-  // });
+  await _auth.signOut().then((_) {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => Wrapper()));
+  });
 }

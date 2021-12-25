@@ -5,55 +5,53 @@ import 'package:equatable/equatable.dart';
 import 'package:jeevamrut_app/models/product_response.dart';
 
 class Cart extends Equatable {
-  final List<ProductResponse> products;
+  final List<String> productIds;
 
-  const Cart({this.products = const <ProductResponse>[]});
+  const Cart({this.productIds = const []});
 
   @override
-  List<Object?> get props => [products];
+  List<Object?> get props => [productIds];
 
-  Map productQuantity(products) {
+  Map productQuantity(List<String> productIds) {
     var quantity = Map();
-    products.forEach((product) {
+    productIds.forEach((product) {
       if (!quantity.containsKey(product)) {
         quantity[product] = 1;
       } else {
         quantity[product] += 1;
       }
-      // print(json.decode(product)["id"]);
     });
-    // print(quantity.keys.length);
     return quantity;
   }
 
-  double get subtotal =>
-      products.fold(0, (total, current) => total + current.price!);
+  // double get subtotal =>
+  //     products.fold(0, (total, current) => total + current.price!);
 
-  double deliveryFee(subtotal) {
-    if (subtotal >= 30.0) {
-      return 0.0;
-    } else
-      return 10.0;
-  }
+  // double deliveryFee(subtotal) {
+  //   if (subtotal >= 30.0) {
+  //     return 0.0;
+  //   } else
+  //     return 10.0;
+  // }
 
-  String freeDelivery(subtotal) {
-    if (subtotal >= 30.0) {
-      return 'You have Free Delivery';
-    } else {
-      double missing = 30.0 - subtotal;
-      return 'Add \$${missing.toStringAsFixed(2)} for FREE Delivery';
-    }
-  }
+  // String freeDelivery(subtotal) {
+  //   if (subtotal >= 30.0) {
+  //     return 'You have Free Delivery';
+  //   } else {
+  //     double missing = 30.0 - subtotal;
+  //     return 'Add \$${missing.toStringAsFixed(2)} for FREE Delivery';
+  //   }
+  // }
 
-  double total(subtotal, deliveryFee) {
-    return subtotal + deliveryFee(subtotal);
-  }
+  // double total(subtotal, deliveryFee) {
+  //   return subtotal + deliveryFee(subtotal);
+  // }
 
-  String get deliveryFeeString => deliveryFee(subtotal).toStringAsFixed(2);
+  // String get deliveryFeeString => deliveryFee(subtotal).toStringAsFixed(2);
 
-  String get subtotalString => subtotal.toStringAsFixed(2);
+  // String get subtotalString => subtotal.toStringAsFixed(2);
 
-  String get totalString => total(subtotal, deliveryFee).toStringAsFixed(2);
+  // String get totalString => total(subtotal, deliveryFee).toStringAsFixed(2);
 
-  String get freeDeliveryString => freeDelivery(subtotal);
+  // String get freeDeliveryString => freeDelivery(subtotal);
 }

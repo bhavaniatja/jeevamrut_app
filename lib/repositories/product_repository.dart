@@ -6,15 +6,18 @@ import 'package:jeevamrut_app/models/product_response.dart';
 import 'package:jeevamrut_app/services/product_data.dart';
 
 class ProductRepository {
-  Future<List<ProductResponse>> getProductsFromApi() async {
+  Future<List<ProductResponse>> getProductsFromApi(String pincode) async {
     try {
-      final response = await HttpService.getRequest();
+      final response = await HttpService.getRequest(pincode);
+      // print(response.body);
       var products = <ProductResponse>[];
       if (response.statusCode == 200) {
-        var prodJson = json.decode(response.body);
+        var content = json.decode(response.body);
+        var prodJson = content["content"];
         for (var prodJson in prodJson) {
           products.add(ProductResponse.fromJson(prodJson));
         }
+        print(products);
         return products;
       } else {
         return <ProductResponse>[];

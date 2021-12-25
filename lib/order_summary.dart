@@ -2,16 +2,46 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jeevamrut_app/bloc/cart/cart_bloc.dart';
 
-class OrderSummary extends StatelessWidget {
+import 'bloc/bloc/product_bloc.dart';
+import 'models/product_response.dart';
+
+class OrderSummary extends StatefulWidget {
   const OrderSummary({
     Key? key,
   }) : super(key: key);
+
+  @override
+  State<OrderSummary> createState() => _OrderSummaryState();
+}
+
+class _OrderSummaryState extends State<OrderSummary> {
+  List<ProductResponse> prods = [];
+  @override
+  void initState() {
+    super.initState();
+    final state = BlocProvider.of<ProductBloc>(context).state;
+    if (state is ProductLoaded) {
+      prods = state.products;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CartBloc, CartState>(
       builder: (context, state) {
         if (state is CartLoaded) {
+          double subtotal = 0;
+          double delivery_fee = 30;
+          double total = 0;
+          for (int i = 0; i < prods.length; i++) {
+            if (state.cart
+                .productQuantity(state.cart.productIds)
+                .containsKey(prods[i].id)) {
+              subtotal += prods[i].prices![0].price! *
+                  state.cart
+                      .productQuantity(state.cart.productIds)["${prods[i].id}"];
+            }
+          }
           return SingleChildScrollView(
             child: Column(
               children: [
@@ -24,7 +54,7 @@ class OrderSummary extends StatelessWidget {
                     children: [
                       Text('SUBTOTAL',
                           style: Theme.of(context).textTheme.headline5),
-                      Text('\$${state.cart.subtotalString}',
+                      Text('\$${subtotal}',
                           style: Theme.of(context).textTheme.headline5),
                     ],
                   ),
@@ -37,7 +67,7 @@ class OrderSummary extends StatelessWidget {
                     children: [
                       Text('DELIVERY FEE',
                           style: Theme.of(context).textTheme.headline5),
-                      Text('\$${state.cart.deliveryFeeString}',
+                      Text('\$${delivery_fee}',
                           style: Theme.of(context).textTheme.headline5),
                     ],
                   ),
@@ -74,7 +104,7 @@ class OrderSummary extends StatelessWidget {
                                   .copyWith(color: Colors.white),
                             ),
                             Text(
-                              '\$${state.cart.totalString}',
+                              '\$${subtotal + delivery_fee}',
                               style: Theme.of(context)
                                   .textTheme
                                   .headline5!

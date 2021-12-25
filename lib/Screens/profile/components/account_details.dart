@@ -25,6 +25,7 @@ class AccountDetails extends StatefulWidget {
 
 class _AccountDetailsState extends State<AccountDetails> {
   File? file;
+  bool loading = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,50 +50,55 @@ class _AccountDetailsState extends State<AccountDetails> {
         ),
       ),
       backgroundColor: Colors.blueGrey[800],
-      body: ListView(children: [
-        SizedBox(
-          height: 20,
-        ),
-        Column(
-          children: <Widget>[
-            _buildProfilePic(file),
-            InkWell(
-              onTap: () {
-                chooseImage();
-              },
-              child: Text(
-                "Upload New Image",
-                style: TextStyle(color: Colors.blue, fontSize: 16),
+      body: loading
+          ? Center(child: CircularProgressIndicator())
+          : ListView(children: [
+              SizedBox(
+                height: 20,
               ),
-            ),
-            const Text(
-              "Shivansh Singh",
-              style: TextStyle(
-                fontSize: 40.0,
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontFamily: "Pacifico",
-              ),
-            ),
-            SizedBox(
-              height: 20,
-              width: 200,
-              child: Divider(
-                color: Colors.white,
-              ),
-            ),
+              Column(
+                children: <Widget>[
+                  _buildProfilePic(file),
+                  InkWell(
+                    onTap: () {
+                      chooseImage();
+                    },
+                    child: Text(
+                      "Upload New Image",
+                      style: TextStyle(color: Colors.blue, fontSize: 16),
+                    ),
+                  ),
+                  const Text(
+                    "Shivansh Singh",
+                    style: TextStyle(
+                      fontSize: 40.0,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: "Pacifico",
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                    width: 200,
+                    child: Divider(
+                      color: Colors.white,
+                    ),
+                  ),
 
-            // we will be creating a new widget name info carrd
-            InfoCard(text: email, icon: Icons.email, onPressed: () async {}),
-            InfoCard(text: phone, icon: Icons.phone, onPressed: () async {}),
-            InfoCard(text: sex, icon: Icons.person, onPressed: () async {}),
-            InfoCard(
-                text: location,
-                icon: Icons.location_city,
-                onPressed: () async {}),
-          ],
-        ),
-      ]),
+                  // we will be creating a new widget name info carrd
+                  InfoCard(
+                      text: email, icon: Icons.email, onPressed: () async {}),
+                  InfoCard(
+                      text: phone, icon: Icons.phone, onPressed: () async {}),
+                  InfoCard(
+                      text: sex, icon: Icons.person, onPressed: () async {}),
+                  InfoCard(
+                      text: location,
+                      icon: Icons.location_city,
+                      onPressed: () async {}),
+                ],
+              ),
+            ]),
     );
   }
 
@@ -103,17 +109,20 @@ class _AccountDetailsState extends State<AccountDetails> {
     setState(() {});
   }
 
-  updateProfile(BuildContext context) async {
+  Future updateProfile(BuildContext context) async {
+    setState(() {
+      loading = true;
+    });
     Map<String, dynamic> map = Map();
     if (file != null) {
       String url = await uploadImage();
       map['profileImage'] = url;
     }
-
     await FirebaseFirestore.instance
         .collection("users")
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .update(map);
+
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => ProfileScreen()));
   }

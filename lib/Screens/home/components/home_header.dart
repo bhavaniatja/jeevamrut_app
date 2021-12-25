@@ -25,7 +25,7 @@ class HomeHeader extends StatelessWidget {
                 return IconBtnWithCounter(
                   svgSrc: "assets/icons/Cart Icon.svg",
                   numOfitem: state.cart
-                      .productQuantity(state.cart.products)
+                      .productQuantity(state.cart.productIds)
                       .keys
                       .length,
                   press: () => Navigator.push(context,

@@ -1,25 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:jeevamrut_app/Authenticate/check.dart';
 import 'package:jeevamrut_app/Screens/checkout/components/payment_options.dart';
 import 'package:jeevamrut_app/Screens/ordersuccess/order_success_screen.dart';
 import 'package:jeevamrut_app/Screens/profile/components/single_delivery_address.dart';
-import 'package:jeevamrut_app/Screens/splash.dart';
 import 'package:jeevamrut_app/bloc/address/address_bloc.dart';
+import 'package:jeevamrut_app/bloc/bloc/product_bloc.dart';
 import 'package:jeevamrut_app/bloc/cart/cart_bloc.dart';
-import 'package:jeevamrut_app/models/Cart.dart';
 import 'package:jeevamrut_app/models/firebaseuser.dart';
+import 'package:jeevamrut_app/models/product_response.dart';
 import 'package:jeevamrut_app/wrapper.dart';
 import 'package:provider/provider.dart';
 
-import '../../cart_product_card.dart';
+import 'package:jeevamrut_app/Screens/cart/components/cart_product_card.dart';
 import '../../order_summary.dart';
-import 'components/payment_card.dart';
 
-class CheckOutScreen extends StatelessWidget {
+class CheckOutScreen extends StatefulWidget {
   CheckOutScreen({Key? key}) : super(key: key);
   static const String routeName = '/checkout';
-  final prods = [];
+
+  @override
+  State<CheckOutScreen> createState() => _CheckOutScreenState();
+}
+
+class _CheckOutScreenState extends State<CheckOutScreen> {
+  List<ProductResponse> prods = [];
+  ProductResponse? finProd;
+  @override
+  void initState() {
+    super.initState();
+    final state = BlocProvider.of<ProductBloc>(context).state;
+    if (state is ProductLoaded) {
+      prods = state.products;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<FirebaseUser?>(context);
@@ -44,38 +58,45 @@ class CheckOutScreen extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            state.cart.freeDeliveryString,
-                            style: Theme.of(context).textTheme.headline5,
-                          ),
+                          // Text(
+                          //   state.cart.freeDeliveryString,
+                          //   style: Theme.of(context).textTheme.headline5,
+                          // ),
                         ],
                       ),
                       SizedBox(height: 20),
                       SizedBox(
                         height: state.cart
-                                    .productQuantity(state.cart.products)
+                                    .productQuantity(state.cart.productIds)
                                     .keys
                                     .length <
                                 4
                             ? state.cart
-                                    .productQuantity(state.cart.products)
+                                    .productQuantity(state.cart.productIds)
                                     .keys
                                     .length *
                                 100.0
                             : 400,
                         child: ListView.builder(
                             itemCount: state.cart
-                                .productQuantity(state.cart.products)
+                                .productQuantity(state.cart.productIds)
                                 .keys
                                 .length,
                             itemBuilder: (BuildContext context, int index) {
+                              for (ProductResponse prod in prods) {
+                                if (prod.id ==
+                                    state.cart
+                                        .productQuantity(state.cart.productIds)
+                                        .keys
+                                        .elementAt(index)) {
+                                  finProd = prod;
+                                  break;
+                                }
+                              }
                               return CartProductCard(
-                                product: state.cart
-                                    .productQuantity(state.cart.products)
-                                    .keys
-                                    .elementAt(index),
+                                product: finProd!,
                                 quantity: state.cart
-                                    .productQuantity(state.cart.products)
+                                    .productQuantity(state.cart.productIds)
                                     .values
                                     .elementAt(index),
                               );
@@ -112,8 +133,8 @@ class CheckOutScreen extends StatelessWidget {
                                 }
                               },
                             ),
-                      PaymentOption(),
                       SizedBox(height: 200, child: OrderSummary()),
+                      PaymentOption(),
                     ],
                   ),
                 ],
@@ -138,7 +159,7 @@ class CheckOutScreen extends StatelessWidget {
             builder: (context, state) {
               if (state is CartLoaded) {
                 return Text(
-                  "${state.cart.productQuantity(state.cart.products).keys.length} items",
+                  "${state.cart.productQuantity(state.cart.productIds).keys.length} items",
                   style: Theme.of(context).textTheme.caption,
                 );
               }

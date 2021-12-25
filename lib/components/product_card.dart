@@ -28,6 +28,7 @@ class ProductCard extends StatefulWidget {
 class _ProductCardState extends State<ProductCard> {
   @override
   Widget build(BuildContext context) {
+    print(widget.product);
     return Padding(
       padding: EdgeInsets.only(left: 20),
       child: SizedBox(
@@ -51,27 +52,34 @@ class _ProductCardState extends State<ProductCard> {
                   child: Hero(
                     tag: widget.product.id.toString(),
                     child: Image.network(
-                      widget.product.productImage!.imageUrl!,
-                      fit: BoxFit.cover,
+                      "${widget.product.productImage!.imageUrl}",
+                      fit: BoxFit.contain,
                     ),
                   ),
                 ),
               ),
               const SizedBox(height: 10),
-              Text(
-                widget.product.name!,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(color: Colors.black),
-                maxLines: 2,
-              ),
-              Text(
-                "\$${widget.product.price}",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  color: kPrimaryColor,
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                Flexible(
+                  child: RichText(
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 2,
+                    strutStyle: StrutStyle(fontSize: 12.0),
+                    text: TextSpan(
+                      style: TextStyle(color: Colors.black),
+                      text: widget.product.name!,
+                    ),
+                  ),
                 ),
-              ),
+                Text(
+                  "\u20b9 ${widget.product.prices![0].price}",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    color: kPrimaryColor,
+                  ),
+                )
+              ]),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -86,44 +94,23 @@ class _ProductCardState extends State<ProductCard> {
                       );
                       ScaffoldMessenger.of(context).showSnackBar(snackBar);
                       context.read<CartBloc>().add(
-                            CartProductAdded(widget.product),
+                            CartProductAdded(widget.product.id!),
                           );
                     },
                   ),
                   BlocBuilder<CartBloc, CartState>(builder: (context, state) {
                     if (state is CartLoaded) {
                       Future.delayed(Duration(seconds: 1));
-                      int ind;
                       if (state.cart
-                          .productQuantity(state.cart.products)
+                          .productQuantity(state.cart.productIds)
                           .keys
-                          .contains(widget.product)) {
-                        // print(state.cart
-                        //     .productQuantity(state.cart.products)
-                        //     .keys
-                        //     .length);
-                        for (int i = 0;
-                            i <
-                                state.cart
-                                    .productQuantity(state.cart.products)
-                                    .keys
-                                    .length;
-                            i++) {
-                          if (state.cart
-                                  .productQuantity(state.cart.products)
-                                  .keys
-                                  .elementAt(i) ==
-                              widget.product) {
-                            return Text(
-                                '${state.cart.productQuantity(state.cart.products).values.elementAt(i)}');
-                          }
-                          // print("yes ${i}");
-                        }
-                      } else {
-                        return Text("0", style: TextStyle(fontSize: 20));
+                          .contains("${widget.product.id}")) {
+                        Map map =
+                            state.cart.productQuantity(state.cart.productIds);
+                        return Text('${map["${widget.product.id}"]}');
                       }
-                      // int ind = state.cart.products.indexWhere(
-                      //     (element) => element.id == widget.product.id);
+                    } else {
+                      return Text("0", style: TextStyle(fontSize: 20));
                     }
                     return Text(
                       "0",
@@ -138,7 +125,7 @@ class _ProductCardState extends State<ProductCard> {
                     onPressed: () {
                       // print(widget.product.name);
                       context.read<CartBloc>().add(
-                            CartProductRemoved(widget.product),
+                            CartProductRemoved(widget.product.id!),
                           );
                     },
                   ),

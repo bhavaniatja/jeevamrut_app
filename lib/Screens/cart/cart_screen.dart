@@ -3,98 +3,166 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jeevamrut_app/Screens/cart/components/cart_product_card.dart';
 import 'package:jeevamrut_app/Screens/cart/components/order_summary.dart';
+import 'package:jeevamrut_app/Screens/home/components/icon_btn_with_counter.dart';
+import 'package:jeevamrut_app/Screens/home/home_screen.dart';
 import 'package:jeevamrut_app/bloc/address/address_bloc.dart';
+import 'package:jeevamrut_app/bloc/bloc/product_bloc.dart';
 import 'package:jeevamrut_app/bloc/cart/cart_bloc.dart';
+import 'package:jeevamrut_app/bottomnav.dart';
 import 'package:jeevamrut_app/models/Cart.dart';
 import 'package:http/http.dart' as http;
+import 'package:jeevamrut_app/models/product_response.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class CartScreen extends StatelessWidget {
+class CartScreen extends StatefulWidget {
   CartScreen({Key? key}) : super(key: key);
   static const String routeName = '/cart';
-  final prods = [];
+
+  @override
+  State<CartScreen> createState() => _CartScreenState();
+}
+
+class _CartScreenState extends State<CartScreen> {
+  List<ProductResponse> prods = [];
+  ProductResponse? finProd;
+  @override
+  void initState() {
+    super.initState();
+    final state = BlocProvider.of<ProductBloc>(context).state;
+    if (state is ProductLoaded) {
+      prods = state.products;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: buildAppBar(context),
-      bottomNavigationBar: _buildCheckoutButton(context),
-      body: BlocBuilder<CartBloc, CartState>(
-        builder: (context, state) {
-          if (state is CartLoading) {
-            return CircularProgressIndicator();
-          }
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => BottomNav()));
+        return true;
+      },
+      child: Scaffold(
+        appBar: buildAppBar(context),
+        bottomNavigationBar: _buildCheckoutButton(context),
+        body: BlocBuilder<CartBloc, CartState>(
+          builder: (context, state) {
+            if (state is CartLoading) {
+              return CircularProgressIndicator();
+            }
 
-          if (state is CartLoaded) {
-            if (state.cart.productQuantity(state.cart.products).keys.isEmpty) {
-              return Center(
-                child: Container(
-                    child: Text("Nothing in Cart",
-                        style: TextStyle(
-                          fontSize: 30,
-                        ))),
+            if (state is CartLoaded) {
+              if (state.cart
+                  .productQuantity(state.cart.productIds)
+                  .keys
+                  .isEmpty) {
+                return Center(
+                  child: Container(
+                      child: Text("Nothing in Cart",
+                          style: TextStyle(
+                            fontSize: 30,
+                          ))),
+                );
+              }
+              return Padding(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 20.0, vertical: 10.0),
+                child: ListView(
+                  children: [
+                    Column(
+                      children: [
+                        SizedBox(height: 20),
+                        SizedBox(
+                          height: state.cart
+                                      .productQuantity(state.cart.productIds)
+                                      .keys
+                                      .length <
+                                  4
+                              ? state.cart
+                                      .productQuantity(state.cart.productIds)
+                                      .keys
+                                      .length *
+                                  100.0
+                              : 400,
+                          child: ListView.builder(
+                              itemCount: state.cart
+                                  .productQuantity(state.cart.productIds)
+                                  .keys
+                                  .length,
+                              itemBuilder: (BuildContext context, int index) {
+                                for (ProductResponse prod in prods) {
+                                  if (prod.id ==
+                                      state.cart
+                                          .productQuantity(
+                                              state.cart.productIds)
+                                          .keys
+                                          .elementAt(index)) {
+                                    finProd = prod;
+                                    break;
+                                  }
+                                }
+                                return CartProductCard(
+                                  product: finProd!,
+                                  quantity: state.cart
+                                      .productQuantity(state.cart.productIds)
+                                      .values
+                                      .elementAt(index),
+                                );
+                              }),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               );
             }
-            return Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-              child: ListView(
-                children: [
-                  Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            state.cart.freeDeliveryString,
-                            style: Theme.of(context).textTheme.headline5,
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 20),
-                      SizedBox(
-                        height: state.cart
-                                    .productQuantity(state.cart.products)
-                                    .keys
-                                    .length <
-                                4
-                            ? state.cart
-                                    .productQuantity(state.cart.products)
-                                    .keys
-                                    .length *
-                                100.0
-                            : 400,
-                        child: ListView.builder(
-                            itemCount: state.cart
-                                .productQuantity(state.cart.products)
-                                .keys
-                                .length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return CartProductCard(
-                                product: state.cart
-                                    .productQuantity(state.cart.products)
-                                    .keys
-                                    .elementAt(index),
-                                quantity: state.cart
-                                    .productQuantity(state.cart.products)
-                                    .values
-                                    .elementAt(index),
-                              );
-                            }),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            );
-          }
-          return Text('Something went wrong');
-        },
+            return Text('Something went wrong');
+          },
+        ),
       ),
     );
   }
 
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
+      backgroundColor: Colors.white,
+      leading: IconButton(
+        icon: Icon(Icons.home),
+        color: Colors.black,
+        onPressed: () {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => BottomNav()));
+        },
+      ),
+      actions: [
+        BlocBuilder<CartBloc, CartState>(
+          builder: (context, state) {
+            if (state is CartLoaded) {
+              return Container(
+                margin: EdgeInsets.all(5),
+                child: IconBtnWithCounter(
+                  svgSrc: "assets/icons/Cart Icon.svg",
+                  numOfitem: state.cart
+                      .productQuantity(state.cart.productIds)
+                      .keys
+                      .length,
+                  press: () => Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => CartScreen())),
+                ),
+              );
+            }
+            return Container(
+              margin: EdgeInsets.all(5),
+              child: IconBtnWithCounter(
+                svgSrc: "assets/icons/Cart Icon.svg",
+                numOfitem: 0,
+                press: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => CartScreen())),
+              ),
+            );
+          },
+        ),
+      ],
       title: Column(
         children: [
           Text(
@@ -105,7 +173,7 @@ class CartScreen extends StatelessWidget {
             builder: (context, state) {
               if (state is CartLoaded) {
                 return Text(
-                  "${state.cart.productQuantity(state.cart.products).keys.length} items",
+                  "${state.cart.productQuantity(state.cart.productIds).keys.length} items",
                   style: Theme.of(context).textTheme.caption,
                 );
               }
@@ -126,23 +194,6 @@ class CartScreen extends StatelessWidget {
             margin: EdgeInsets.only(bottom: 10, left: 5, right: 5),
             child: ElevatedButton(
               onPressed: () async {
-                for (int i = 0;
-                    i <
-                        state.cart
-                            .productQuantity(state.cart.products)
-                            .keys
-                            .length;
-                    i++) {
-                  prods.add(state.cart
-                      .productQuantity(state.cart.products)
-                      .keys
-                      .elementAt(i));
-                }
-                // print(prods);
-                Future.delayed(Duration(seconds: 2), () async {
-                  // 5s over, navigate to a new page
-                  await _sendCartData(context, prods);
-                });
                 BlocProvider.of<AddressBloc>(context).add(LoadAddress());
                 Navigator.pushNamed(context, '/checkout');
               },
@@ -194,12 +245,4 @@ class CartScreen extends StatelessWidget {
       throw e;
     }
   }
-
-  // void _sendCartList(State state) {
-  //   BlocListener<CartBloc, CartState>(listener,: (context, state) {
-  //     if (state is CartLoaded) {
-
-  //     return null;
-  //   });
-  // }
 }

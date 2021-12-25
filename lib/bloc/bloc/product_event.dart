@@ -9,7 +9,12 @@ abstract class ProductEvent extends Equatable {
 
 class LoadingProductEvent extends ProductEvent {}
 
-class LoadProducts extends ProductEvent {}
+class LoadProducts extends ProductEvent {
+  final String pincode;
+  LoadProducts(this.pincode);
+  @override
+  List<Object> get props => [pincode];
+}
 
 class UpdateProducts extends ProductEvent {
   final List<ProductResponse> products;

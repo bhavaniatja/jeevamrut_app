@@ -28,8 +28,8 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       try {
         emit(CartLoaded(
           cart: Cart(
-            products: List.from((state as CartLoaded).cart.products)
-              ..remove(event.product),
+            productIds: List.from((state as CartLoaded).cart.productIds)
+              ..remove(event.productId),
           ),
         ));
         // Future.delayed(Duration(seconds: 1));
@@ -42,8 +42,8 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   void _checkAdded(CartProductAdded event, Emitter<CartState> emit) async {
     emit(CartLoaded(
       cart: Cart(
-        products: List.from((state as CartLoaded).cart.products)
-          ..add(event.product),
+        productIds: List.from((state as CartLoaded).cart.productIds)
+          ..add(event.productId),
       ),
     ));
     // Future.delayed(Duration(seconds: 1));
@@ -54,12 +54,9 @@ class CartBloc extends Bloc<CartEvent, CartState> {
 
   Future<void> _addData() async {
     List<String> list = [];
-    var data = (state as CartLoaded).cart.products;
-    for (var da in data) {
-      list.add(json.encode(da));
-    }
+    var data = (state as CartLoaded).cart.productIds;
     SharedPreferences pref = await SharedPreferences.getInstance();
-    pref.setStringList('cart', list);
+    pref.setStringList('cart', data);
     List<String> lst = pref.getStringList('cart')!;
     // print(lst);
   }

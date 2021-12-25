@@ -50,7 +50,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (_) => ProductBloc(
             productRepository: ProductRepository(),
-          )..add(LoadProducts()),
+          )..add(LoadingProductEvent()),
         ),
         BlocProvider(
             create: (_) => AddressBloc(productRepository: ProductRepository())),

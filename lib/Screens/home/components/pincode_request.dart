@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:jeevamrut_app/Screens/home/components/pincode_request.dart';
+import 'package:jeevamrut_app/bloc/pincode/pincode_bloc.dart';
+import 'package:jeevamrut_app/bottomnav.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:jeevamrut_app/bloc/pincode/pincode_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-class LocationField extends StatefulWidget {
-  const LocationField({Key? key}) : super(key: key);
+class PincodeRequestScreen extends StatefulWidget {
+  const PincodeRequestScreen({Key? key}) : super(key: key);
 
   @override
-  _LocationFieldState createState() => _LocationFieldState();
+  _PincodeRequestScreenState createState() => _PincodeRequestScreenState();
 }
 
-class _LocationFieldState extends State<LocationField> {
+class _PincodeRequestScreenState extends State<PincodeRequestScreen> {
   final _textEditingController = TextEditingController();
   String value = "";
 
@@ -41,46 +42,48 @@ class _LocationFieldState extends State<LocationField> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => PincodeRequestScreen()));
-        // _determinePosition();
-      },
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15),
-        ),
-        child: BlocBuilder<PincodeBloc, PincodeState>(
-          builder: (context, state) {
-            if (state is PincodeInitial || state is PincodeEditState) {
-              return const TextField(
-                enabled: false,
-                decoration: InputDecoration(
-                  contentPadding: EdgeInsets.symmetric(vertical: 20),
-                  border: InputBorder.none,
-                  focusedBorder: InputBorder.none,
-                  enabledBorder: InputBorder.none,
-                  hintText: "Enter Pincode",
-                  prefixIcon: Icon(Icons.location_on),
-                ),
-              );
-            }
-            if (state is PincodeEditedState) {
-              return TextField(
-                enabled: false,
-                decoration: InputDecoration(
-                  contentPadding: EdgeInsets.symmetric(vertical: 20),
-                  border: InputBorder.none,
-                  focusedBorder: InputBorder.none,
-                  enabledBorder: InputBorder.none,
-                  hintText: state.pincode,
-                  prefixIcon: Icon(Icons.location_on),
-                ),
-              );
-            }
-            return Text("Enter Pincode");
+    return Scaffold(
+      body: Center(
+        child: GestureDetector(
+          onTap: () {
+            editModalBottomSheet();
           },
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: BlocBuilder<PincodeBloc, PincodeState>(
+              builder: (context, state) {
+                if (state is PincodeInitial || state is PincodeEditState) {
+                  return const TextField(
+                    enabled: false,
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.symmetric(vertical: 20),
+                      border: OutlineInputBorder(),
+                      focusedBorder: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      hintText: "Enter Pincode",
+                      prefixIcon: Icon(Icons.location_on),
+                    ),
+                  );
+                }
+                if (state is PincodeEditedState) {
+                  return TextField(
+                    enabled: false,
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.symmetric(vertical: 20),
+                      border: OutlineInputBorder(),
+                      focusedBorder: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      hintText: "Enter Pincode",
+                      prefixIcon: Icon(Icons.location_on),
+                    ),
+                  );
+                }
+                return Text("Enter Pincode");
+              },
+            ),
+          ),
         ),
       ),
     );
@@ -181,7 +184,7 @@ class _LocationFieldState extends State<LocationField> {
                             ..text = state.pincode,
                           decoration: InputDecoration(
                             contentPadding: EdgeInsets.symmetric(vertical: 20),
-                            border: InputBorder.none,
+                            border: OutlineInputBorder(),
                             hintText: state.pincode,
                             focusedBorder: InputBorder.none,
                             enabledBorder: InputBorder.none,
@@ -202,7 +205,11 @@ class _LocationFieldState extends State<LocationField> {
                         final preferences =
                             await SharedPreferences.getInstance();
                         await preferences.setString('pincode', value);
-                        Navigator.of(context).pop();
+                        // Navigator.of(context).pop();
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => BottomNav()));
                       },
                       child: Text("Submit")),
                   ElevatedButton(

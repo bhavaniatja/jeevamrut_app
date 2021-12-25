@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
+import 'package:jeevamrut_app/Screens/home/components/pincode_request.dart';
 import 'package:jeevamrut_app/bottomnav.dart';
 import 'package:jeevamrut_app/models/firebaseuser.dart';
 import 'package:jeevamrut_app/services/auth.dart';
@@ -179,8 +180,10 @@ class _CheckScreenState extends State<CheckScreen> {
                   child: RaisedButton(
                     padding: const EdgeInsets.all(17.0),
                     onPressed: () async {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => BottomNav()));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => PincodeRequestScreen()));
                     },
                     child: const Text(
                       "Guest Login",

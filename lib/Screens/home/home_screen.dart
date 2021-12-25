@@ -3,8 +3,13 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:jeevamrut_app/Screens/home/components/location_field.dart';
+import 'package:jeevamrut_app/Screens/home/components/pincode_request.dart';
+import 'package:jeevamrut_app/bloc/bloc/product_bloc.dart';
 import 'package:jeevamrut_app/bloc/cart/cart_bloc.dart';
+import 'package:jeevamrut_app/bloc/pincode/pincode_bloc.dart';
 import 'package:jeevamrut_app/models/product_response.dart';
+import 'package:jeevamrut_app/repositories/product_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'components/body.dart';
 
@@ -17,6 +22,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  // final blocA = ProductBloc(productRepository: ProductRepository());
   @override
   Widget build(BuildContext context) {
     Future<bool> showExitPopup() async {
@@ -45,9 +51,21 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     return WillPopScope(
-      onWillPop: showExitPopup,
-      child: Scaffold(body: Body()),
-    );
+        onWillPop: showExitPopup,
+        child: Scaffold(
+          body:
+              BlocBuilder<PincodeBloc, PincodeState>(builder: (context, state) {
+            if (state is PincodeInitial) {
+              return PincodeRequestScreen();
+            } else if (state is PincodeEditedState) {
+              context.read<ProductBloc>().add(LoadProducts(state.pincode));
+              final pincode = state.pincode;
+
+              return Body();
+            }
+            return SizedBox();
+          }),
+        ));
   }
 }
 //special offers image dimensions ~1k*400px

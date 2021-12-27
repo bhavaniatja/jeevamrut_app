@@ -180,10 +180,8 @@ class _CheckScreenState extends State<CheckScreen> {
                   child: RaisedButton(
                     padding: const EdgeInsets.all(17.0),
                     onPressed: () async {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => PincodeRequestScreen()));
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => BottomNav()));
                     },
                     child: const Text(
                       "Guest Login",

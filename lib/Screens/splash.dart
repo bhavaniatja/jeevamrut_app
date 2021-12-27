@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jeevamrut_app/Authenticate/check.dart';
+import 'package:jeevamrut_app/Screens/wrapper_intro.dart';
 import 'package:jeevamrut_app/bloc/cart/cart_bloc.dart';
 import 'package:jeevamrut_app/models/product_response.dart';
 import 'package:jeevamrut_app/wrapper.dart';
@@ -27,7 +28,7 @@ class _SplashScreenState extends State<SplashScreen> {
   _navigatetohome() async {
     await Future.delayed(Duration(milliseconds: 1500), () {});
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => Wrapper()));
+        context, MaterialPageRoute(builder: (context) => WrapperIntro()));
   }
 
   @override

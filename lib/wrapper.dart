@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jeevamrut_app/Authenticate/check.dart';
 import 'package:jeevamrut_app/bottomnav.dart';
-import 'package:jeevamrut_app/repositories/get_location.dart';
 import 'package:provider/provider.dart';
 
 import 'models/firebaseuser.dart';

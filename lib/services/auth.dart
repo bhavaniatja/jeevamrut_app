@@ -94,8 +94,8 @@ void postToAws(String uid, String? mobile) async {
   final Uri url = Uri.parse(endPoint);
   Map body = {
     "id": uid,
-    "fname": "Bhavani Prasad",
-    "lname": "S",
+    "fname": "Default fname",
+    "lname": "Default lname",
     "email": "bhavani9@gmail.com",
     "mobileNumber": mobile,
     "altMobileNumber": null,

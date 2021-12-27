@@ -22,7 +22,12 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // final blocA = ProductBloc(productRepository: ProductRepository());
+  @override
+  void initState() {
+    _checkPincode();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     Future<bool> showExitPopup() async {
@@ -55,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Scaffold(
           body:
               BlocBuilder<PincodeBloc, PincodeState>(builder: (context, state) {
-            if (state is PincodeInitial) {
+            if (state is PincodeInitial || state is PincodeEditState) {
               return PincodeRequestScreen();
             } else if (state is PincodeEditedState) {
               context.read<ProductBloc>().add(LoadProducts(state.pincode));
@@ -66,6 +71,15 @@ class _HomeScreenState extends State<HomeScreen> {
             return SizedBox();
           }),
         ));
+  }
+
+  Future _checkPincode() async {
+    final preferences = await SharedPreferences.getInstance();
+    // print(preferences.getString('pincode'));
+    if (preferences.containsKey('pincode')) {
+      String? str = preferences.getString('pincode');
+      BlocProvider.of<PincodeBloc>(context).add(PincodeEditedEvent(str!));
+    }
   }
 }
 //special offers image dimensions ~1k*400px

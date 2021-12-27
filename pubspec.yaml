@@ -34,6 +34,7 @@ dependencies:
   firebase_storage: ^10.2.4
   cloud_firestore: ^2.4.0
   firebase_core: ^1.10.0
+  introduction_screen: ^2.1.0
   flutter:
     sdk: flutter
   flutter_bloc: ^8.0.0
@@ -88,9 +89,7 @@ flutter:
     - assets/icons/Cart Icon.svg
     - assets/icons/fruits.svg
     - assets/icons/farm.svg
-    - assets/images/vegetables_offers.png
-    - assets/images/fruits_offers.png
-    - assets/icons/vegetables-salad.svg
+    - assets/images/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

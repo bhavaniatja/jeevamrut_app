@@ -16,7 +16,7 @@ class PincodeRequestScreen extends StatefulWidget {
 }
 
 class _PincodeRequestScreenState extends State<PincodeRequestScreen> {
-  final _textEditingController = TextEditingController();
+  TextEditingController _textEditingController = TextEditingController();
   String value = "";
 
   @override
@@ -28,7 +28,6 @@ class _PincodeRequestScreenState extends State<PincodeRequestScreen> {
 
   @override
   void initState() {
-    _checkPincode();
     _textEditingController.addListener(() {
       //here you have the changes of your textfield
       // print("value: ${_textEditingController.text}");
@@ -172,7 +171,7 @@ class _PincodeRequestScreenState extends State<PincodeRequestScreen> {
                           decoration: InputDecoration(
                             contentPadding: EdgeInsets.symmetric(vertical: 20),
                             border: OutlineInputBorder(),
-                            // hintText: state.pincode,
+                            hintText: state.pincode,
                             prefixIcon: Icon(Icons.location_on),
                           ),
                         );
@@ -205,7 +204,7 @@ class _PincodeRequestScreenState extends State<PincodeRequestScreen> {
                         final preferences =
                             await SharedPreferences.getInstance();
                         await preferences.setString('pincode', value);
-                        // Navigator.of(context).pop();
+                        Navigator.of(context).pop();
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
@@ -215,8 +214,8 @@ class _PincodeRequestScreenState extends State<PincodeRequestScreen> {
                   ElevatedButton(
                       onPressed: () async {
                         String getpin = await _determinePosition();
-                        // BlocProvider.of<PincodeBloc>(context)
-                        //     .add(PincodeInitEvent());
+                        BlocProvider.of<PincodeBloc>(context)
+                            .add(PincodeInitEvent());
                         Future.delayed(Duration(seconds: 1));
                         BlocProvider.of<PincodeBloc>(context)
                             .add(PincodeEditEvent(getpin));
@@ -228,14 +227,5 @@ class _PincodeRequestScreenState extends State<PincodeRequestScreen> {
             ),
           );
         });
-  }
-
-  Future _checkPincode() async {
-    final preferences = await SharedPreferences.getInstance();
-    // print(preferences.getString('pincode'));
-    if (preferences.containsKey('pincode')) {
-      String? str = preferences.getString('pincode');
-      BlocProvider.of<PincodeBloc>(context).add(PincodeEditedEvent(str!));
-    }
   }
 }

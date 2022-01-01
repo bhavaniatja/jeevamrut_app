@@ -12,6 +12,8 @@ import 'package:jeevamrut_app/Screens/splash.dart';
 import 'package:jeevamrut_app/bloc/address/address_bloc.dart';
 import 'package:jeevamrut_app/bloc/auth/bloc/auth_bloc.dart';
 import 'package:jeevamrut_app/bloc/cart/cart_bloc.dart';
+import 'package:jeevamrut_app/bloc/categories/categories_bloc.dart';
+import 'package:jeevamrut_app/bloc/orders/orders_bloc.dart';
 import 'package:jeevamrut_app/bloc/pincode/pincode_bloc.dart';
 import 'package:jeevamrut_app/bottomnav.dart';
 import 'package:jeevamrut_app/models/firebaseuser.dart';
@@ -51,6 +53,16 @@ class MyApp extends StatelessWidget {
           create: (_) => ProductBloc(
             productRepository: ProductRepository(),
           )..add(LoadingProductEvent()),
+        ),
+        BlocProvider(
+          create: (_) => CategoriesBloc(
+            productRepository: ProductRepository(),
+          )..add(LoadingCategoriesEvent()),
+        ),
+        BlocProvider(
+          create: (_) => OrdersBloc(
+            productRepository: ProductRepository(),
+          )..add(LoadingOrdersEvent()),
         ),
         BlocProvider(
             create: (_) => AddressBloc(productRepository: ProductRepository())),

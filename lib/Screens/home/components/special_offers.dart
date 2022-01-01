@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jeevamrut_app/Screens/allcategories/all_categories_screen.dart';
 import 'package:jeevamrut_app/Screens/categories/categories_screen.dart';
 import 'package:jeevamrut_app/size_config.dart';
 import 'section_title.dart';
@@ -35,7 +36,7 @@ class SpecialOffers extends StatelessWidget {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => CategoriesScreen()));
+                          builder: (context) => AllCategoriesScreen()));
                 },
               ),
               SpecialOfferCard(
@@ -46,7 +47,7 @@ class SpecialOffers extends StatelessWidget {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => CategoriesScreen()));
+                          builder: (context) => AllCategoriesScreen()));
                 },
               ),
               SizedBox(width: 20),

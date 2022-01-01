@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jeevamrut_app/Screens/orders/components/track_order.dart';
 import 'package:jeevamrut_app/models/Cart.dart';
+import 'package:jeevamrut_app/models/orders_response.dart';
 
 import '../../../constants.dart';
 
@@ -9,7 +10,7 @@ class OrdersCard extends StatefulWidget {
     Key? key,
     required this.cart,
   }) : super(key: key);
-  final Cart cart;
+  final OrdersResponse cart;
   @override
   State<OrdersCard> createState() => _OrdersCardState();
 }
@@ -34,7 +35,8 @@ class _OrdersCardState extends State<OrdersCard> {
                   color: Color(0xFFF5F6F9),
                   borderRadius: BorderRadius.circular(15),
                 ),
-                child: Image.asset(widget.cart.product.image!),
+                child: Image.network(
+                    "${widget.cart.product!.productImage!.imageUrl}"),
               ),
             ),
           ),
@@ -45,7 +47,7 @@ class _OrdersCardState extends State<OrdersCard> {
               Container(
                 width: 60,
                 child: Text(
-                  widget.cart.product.title!,
+                  "${widget.cart.product!.name}",
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(color: Colors.black, fontSize: 16),
                   maxLines: 2,
@@ -54,12 +56,12 @@ class _OrdersCardState extends State<OrdersCard> {
               SizedBox(height: 10),
               Text.rich(
                 TextSpan(
-                  text: "\$${widget.cart.product.price}",
+                  text: "\u20b9 ${widget.cart.product!.prices![0].price}",
                   style: TextStyle(
                       fontWeight: FontWeight.w600, color: kPrimaryColor),
                   children: [
                     TextSpan(
-                        text: " x${widget.cart.numOfItem}",
+                        text: " x2",
                         style: Theme.of(context).textTheme.bodyText1),
                   ],
                 ),
@@ -79,7 +81,7 @@ class _OrdersCardState extends State<OrdersCard> {
                         fontStyle: FontStyle.italic)),
                 SizedBox(width: 5),
                 Text(
-                  "\u20b9${(widget.cart.product.price!) * (widget.cart.numOfItem)}",
+                  "\u20b9 500",
                   style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
                 ),
               ],

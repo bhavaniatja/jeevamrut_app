@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:jeevamrut_app/models/product.dart';
 
 class Cart {

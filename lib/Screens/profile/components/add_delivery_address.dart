@@ -1,14 +1,17 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
 import 'package:jeevamrut_app/bloc/address/address_bloc.dart';
 import 'package:jeevamrut_app/bloc/bloc/product_bloc.dart';
+import 'package:jeevamrut_app/models/address_response.dart';
 
 class AddDeliverAddress extends StatefulWidget {
-  const AddDeliverAddress({Key? key}) : super(key: key);
+  final AddressResponse addressResponse;
+  const AddDeliverAddress(this.addressResponse, {Key? key}) : super(key: key);
 
   @override
   _AddDeliverAddressState createState() => _AddDeliverAddressState();
@@ -26,7 +29,7 @@ class _AddDeliverAddressState extends State<AddDeliverAddress> {
   late String _pincode;
   late String _cityName;
   late String _stateName;
-
+  final user = FirebaseAuth.instance.currentUser;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   Widget _buildBuildingName() {
@@ -167,34 +170,19 @@ class _AddDeliverAddressState extends State<AddDeliverAddress> {
     );
   }
 
-  // Widget _buildAltPhoneNumber() {
-  //   return TextFormField(
-  //     decoration: InputDecoration(labelText: 'Alternate Phone number'),
-  //     keyboardType: TextInputType.phone,
-  //     validator: (String? value) {
-  //       if (!RegExp("[0-9]+").hasMatch(value!)) {
-  //         return "Enter Correct Mobile Number";
-  //       }
-  //       return null;
-  //     },
-  //     onSaved: (String? value) {
-  //       _altphoneNumber = value!;
-  //     },
-  //   );
-  // }
-
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
         onWillPop: () async {
-          BlocProvider.of<AddressBloc>(context).add((LoadAddress()));
+          BlocProvider.of<AddressBloc>(context).add((LoadAddress(user!.uid)));
           return true;
         },
         child: Scaffold(
           appBar: AppBar(
             leading: IconButton(
                 onPressed: () {
-                  BlocProvider.of<AddressBloc>(context).add((LoadAddress()));
+                  BlocProvider.of<AddressBloc>(context)
+                      .add((LoadAddress(user!.uid)));
                   Navigator.pop(context);
                 },
                 icon: Icon(Icons.arrow_back_ios_sharp)),
@@ -217,10 +205,11 @@ class _AddDeliverAddressState extends State<AddDeliverAddress> {
                       _formKey.currentState!.save();
 
                       submitAddress(
+                          widget.addressResponse.id!,
                           _buildingName,
                           _apartNo,
-                          _chosenValue,
                           _landmark,
+                          widget.addressResponse.mobile!,
                           _streetName,
                           _cityName,
                           _stateName,
@@ -243,7 +232,8 @@ class _AddDeliverAddressState extends State<AddDeliverAddress> {
                 } else if (state is AddressEditedState) {
                   return MaterialButton(
                     onPressed: () {
-                      BlocProvider.of<AddressBloc>(context).add(LoadAddress());
+                      BlocProvider.of<AddressBloc>(context)
+                          .add(LoadAddress(user!.uid));
                       Navigator.of(context).pop();
                     },
                     child: const Text(
@@ -280,7 +270,7 @@ class _AddDeliverAddressState extends State<AddDeliverAddress> {
                           _buildApartmentNo(),
                           _buildStreetName(),
                           _buildlandmark(),
-                          _buildAddressType(),
+                          // _buildAddressType(),
                           _buildCityName(),
                           _buildStateName(),
                           _buildPincode(),
@@ -300,7 +290,7 @@ class _AddDeliverAddressState extends State<AddDeliverAddress> {
                             child: ElevatedButton(
                               onPressed: () {
                                 BlocProvider.of<AddressBloc>(context)
-                                    .add(LoadAddress());
+                                    .add(LoadAddress(user!.uid));
                                 Navigator.of(context).pop();
                               },
                               child: Text("Go back:)"),
@@ -321,18 +311,17 @@ class _AddDeliverAddressState extends State<AddDeliverAddress> {
 }
 
 Future<void> submitAddress(
+    String id,
     String buildingName,
     String apartNo,
-    String type,
     String landmark,
+    String mobile,
     String streetName,
     String cityName,
     String stateName,
     String pincode) async {
   final response;
-  print(type +
-      "" +
-      apartNo +
+  print(apartNo +
       " " +
       buildingName +
       " " +
@@ -341,12 +330,12 @@ Future<void> submitAddress(
       pincode +
       " " +
       stateName);
-  const String endPoint =
-      "http://ec2-18-188-87-26.us-east-2.compute.amazonaws.com:8080/address/";
+  String endPoint =
+      "http://ec2-18-188-87-26.us-east-2.compute.amazonaws.com:8080/address/${id}";
   final Uri url = Uri.parse(endPoint);
   Map body = {
-    "customerId": "447d69f2-35e0-41ce-b785-d0ec4a8b650d",
-    "type": type,
+    "user": null,
+    "type": "Home",
     "preference": 2,
     "buildingName": buildingName,
     "apartmentNumber": apartNo,
@@ -358,11 +347,15 @@ Future<void> submitAddress(
     "state": stateName,
     "country": "INDIA",
     "pinCode": pincode,
-    "mobile": "+917322176745",
-    "alternateMobile": "+912003220662"
+    "mobile": mobile,
+    "alternateMobile": "",
+    "createDate": "2021-12-28T08:29:06.000+00:00",
+    "createdBy": "",
+    "updatedDate": "2021-12-28T08:29:06.000+00:00",
+    "updatedBy": ""
   };
   try {
-    response = await http.post(
+    response = await http.put(
       url,
       body: json.encode(body),
       headers: {"Content-Type": "application/json"},

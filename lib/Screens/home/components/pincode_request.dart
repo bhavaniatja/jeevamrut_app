@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:jeevamrut_app/bloc/cart/cart_bloc.dart';
 import 'package:jeevamrut_app/bloc/pincode/pincode_bloc.dart';
 import 'package:jeevamrut_app/bottomnav.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -42,48 +43,58 @@ class _PincodeRequestScreenState extends State<PincodeRequestScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: GestureDetector(
-          onTap: () {
-            editModalBottomSheet();
-          },
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15),
-            ),
-            child: BlocBuilder<PincodeBloc, PincodeState>(
-              builder: (context, state) {
-                if (state is PincodeInitial || state is PincodeEditState) {
-                  return const TextField(
-                    enabled: false,
-                    decoration: InputDecoration(
-                      contentPadding: EdgeInsets.symmetric(vertical: 20),
-                      border: OutlineInputBorder(),
-                      focusedBorder: InputBorder.none,
-                      enabledBorder: InputBorder.none,
-                      hintText: "Enter Pincode",
-                      prefixIcon: Icon(Icons.location_on),
-                    ),
-                  );
-                }
-                if (state is PincodeEditedState) {
-                  return TextField(
-                    enabled: false,
-                    decoration: InputDecoration(
-                      contentPadding: EdgeInsets.symmetric(vertical: 20),
-                      border: OutlineInputBorder(),
-                      focusedBorder: InputBorder.none,
-                      enabledBorder: InputBorder.none,
-                      hintText: "Enter Pincode",
-                      prefixIcon: Icon(Icons.location_on),
-                    ),
-                  );
-                }
-                return Text("Enter Pincode");
-              },
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          GestureDetector(
+            onTap: () {
+              editModalBottomSheet();
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: BlocBuilder<PincodeBloc, PincodeState>(
+                builder: (context, state) {
+                  if (state is PincodeInitial || state is PincodeEditState) {
+                    return const TextField(
+                      enabled: false,
+                      decoration: InputDecoration(
+                        contentPadding: EdgeInsets.symmetric(vertical: 20),
+                        border: OutlineInputBorder(),
+                        focusedBorder: InputBorder.none,
+                        enabledBorder: InputBorder.none,
+                        hintText: "Enter Pincode",
+                        prefixIcon: Icon(Icons.location_on),
+                      ),
+                    );
+                  }
+                  if (state is PincodeEditedState) {
+                    return TextField(
+                      enabled: false,
+                      decoration: InputDecoration(
+                        contentPadding: EdgeInsets.symmetric(vertical: 20),
+                        border: OutlineInputBorder(),
+                        focusedBorder: InputBorder.none,
+                        enabledBorder: InputBorder.none,
+                        hintText: state.pincode,
+                        prefixIcon: Icon(Icons.location_on),
+                      ),
+                    );
+                  }
+                  return Text("Enter Pincode");
+                },
+              ),
             ),
           ),
-        ),
+          ElevatedButton(
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => BottomNav()));
+              },
+              child: Text("Confirm"))
+        ],
       ),
     );
   }
@@ -131,6 +142,7 @@ class _PincodeRequestScreenState extends State<PincodeRequestScreen> {
   void editModalBottomSheet() {
     showModalBottomSheet(
         context: context,
+        isDismissible: false,
         builder: (BuildContext bc) {
           return Container(
             decoration: BoxDecoration(
@@ -143,9 +155,20 @@ class _PincodeRequestScreenState extends State<PincodeRequestScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text(
-                    "Please Enter Your Pincode",
-                  ),
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Please Enter Your Pincode",
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          icon: Icon(Icons.close),
+                          color: Colors.red,
+                        )
+                      ]),
                   SizedBox(
                     height: 4,
                   ),
@@ -185,8 +208,6 @@ class _PincodeRequestScreenState extends State<PincodeRequestScreen> {
                             contentPadding: EdgeInsets.symmetric(vertical: 20),
                             border: OutlineInputBorder(),
                             hintText: state.pincode,
-                            focusedBorder: InputBorder.none,
-                            enabledBorder: InputBorder.none,
                             prefixIcon: Icon(Icons.location_on),
                           ),
                         );
@@ -204,11 +225,9 @@ class _PincodeRequestScreenState extends State<PincodeRequestScreen> {
                         final preferences =
                             await SharedPreferences.getInstance();
                         await preferences.setString('pincode', value);
-                        Navigator.of(context).pop();
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => BottomNav()));
+                        await preferences.remove('cart');
+                        BlocProvider.of<CartBloc>(context).add(CartStarted());
+                        _toHome();
                       },
                       child: Text("Submit")),
                   ElevatedButton(
@@ -216,7 +235,7 @@ class _PincodeRequestScreenState extends State<PincodeRequestScreen> {
                         String getpin = await _determinePosition();
                         BlocProvider.of<PincodeBloc>(context)
                             .add(PincodeInitEvent());
-                        Future.delayed(Duration(seconds: 1));
+                        Future.delayed(Duration(milliseconds: 100));
                         BlocProvider.of<PincodeBloc>(context)
                             .add(PincodeEditEvent(getpin));
                         // print(_determinePosition());
@@ -227,5 +246,9 @@ class _PincodeRequestScreenState extends State<PincodeRequestScreen> {
             ),
           );
         });
+  }
+
+  void _toHome() {
+    Navigator.of(context).pop();
   }
 }

@@ -16,11 +16,6 @@ class DeliveryDetails extends StatefulWidget {
 
 class _DeliveryDetailsState extends State<DeliveryDetails> {
   static const String routeName = '/address';
-  // @override
-  // void initState() {
-  //   super.initState();
-
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +38,7 @@ class _DeliveryDetailsState extends State<DeliveryDetails> {
 
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => AddDeliverAddress(),
+                      builder: (context) => AddDeliverAddress(state.Address),
                     ),
                   );
                 },
@@ -81,7 +76,7 @@ class _DeliveryDetailsState extends State<DeliveryDetails> {
               ],
             );
           } else {
-            return SizedBox();
+            return Center(child: CircularProgressIndicator());
           }
         },
       ),

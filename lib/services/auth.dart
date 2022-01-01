@@ -50,7 +50,6 @@ class AuthService {
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
     User? user = FirebaseAuth.instance.currentUser;
     http.Response usercheckresponse;
-    // bool check = false;
     final checkuser = Uri.parse(
         "http://ec2-18-188-87-26.us-east-2.compute.amazonaws.com:8080/api/user/${user!.uid}");
     print(checkuser);
@@ -93,7 +92,7 @@ void postToAws(String uid, String? mobile) async {
       "http://ec2-18-188-87-26.us-east-2.compute.amazonaws.com:8080/api/user";
   final Uri url = Uri.parse(endPoint);
   Map body = {
-    "id": uid,
+    "userId": uid,
     "fname": "Default fname",
     "lname": "Default lname",
     "email": "bhavani9@gmail.com",

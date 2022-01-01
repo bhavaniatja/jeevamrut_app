@@ -18,17 +18,17 @@ class OrdersScreen extends StatelessWidget {
 
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
-      title: Column(
-        children: [
-          const Text(
-            "Your Orders",
-            style: TextStyle(color: Colors.white70),
-          ),
-          Text(
-            "2 items",
-            style: Theme.of(context).textTheme.caption,
-          ),
-        ],
+      automaticallyImplyLeading: false,
+      title: Center(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const Text(
+              "Your Orders",
+              style: TextStyle(color: Colors.white),
+            ),
+          ],
+        ),
       ),
     );
   }

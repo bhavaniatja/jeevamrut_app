@@ -15,7 +15,7 @@ class AddressBloc extends Bloc<AddressEvent, AddressState> {
       emit(AddressLoading());
     });
     on<LoadAddress>((event, emit) async {
-      final address = await _productRepository.getAddressFromApi();
+      final address = await _productRepository.getAddressFromApi(event.uid);
       emit((AddressLoaded(address)));
       // Future.delayed(Duration(seconds: 4));
       // emit((AddressLoading()));

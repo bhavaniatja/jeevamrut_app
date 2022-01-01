@@ -1,27 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:jeevamrut_app/bloc/pincode/pincode_bloc.dart';
 
 import 'components/body.dart';
 
-class CategoriesScreen extends StatelessWidget {
-  final String? category;
-  const CategoriesScreen({Key? key, this.category}) : super(key: key);
+class AllCategoriesScreen extends StatelessWidget {
+  const AllCategoriesScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: buildAppBar(context),
-      body: BlocBuilder<PincodeBloc, PincodeState>(
-        builder: (context, state) {
-          if (state is PincodeEditedState) {
-            return Body(category!, state.pincode);
-          }
-          return Center(
-            child: Text("Enter Pincode,Go to HomeScreen"),
-          );
-        },
-      ),
+      body: Body(),
     );
   }
 

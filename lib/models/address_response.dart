@@ -13,7 +13,7 @@ String addressResponseToJson(AddressResponse data) =>
 class AddressResponse {
   AddressResponse({
     this.id,
-    this.customerId,
+    this.user,
     this.type,
     this.preference,
     this.buildingName,
@@ -35,7 +35,7 @@ class AddressResponse {
   });
 
   String? id;
-  String? customerId;
+  String? user;
   String? type;
   int? preference;
   String? buildingName;
@@ -58,7 +58,7 @@ class AddressResponse {
   factory AddressResponse.fromJson(Map<String, dynamic> json) =>
       AddressResponse(
         id: json["id"],
-        customerId: json["customerId"],
+        user: json["user"],
         type: json["type"],
         preference: json["preference"],
         buildingName: json["buildingName"],
@@ -81,7 +81,7 @@ class AddressResponse {
 
   Map<String, dynamic> toJson() => {
         "id": id,
-        "customerId": customerId,
+        "user": user,
         "type": type,
         "preference": preference,
         "buildingName": buildingName,

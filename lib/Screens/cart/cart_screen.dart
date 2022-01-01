@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jeevamrut_app/Screens/cart/components/cart_product_card.dart';
@@ -23,8 +24,11 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
+  final user = FirebaseAuth.instance.currentUser;
   List<ProductResponse> prods = [];
   ProductResponse? finProd;
+  double subtotal = 0;
+  List<Map<String, dynamic>> list = [];
   @override
   void initState() {
     super.initState();
@@ -97,6 +101,19 @@ class _CartScreenState extends State<CartScreen> {
                                               state.cart.productIds)
                                           .keys
                                           .elementAt(index)) {
+                                    list.add({
+                                      "productId": prod.id,
+                                      "quantity": state.cart
+                                          .productQuantity(
+                                              state.cart.productIds)
+                                          .values
+                                          .elementAt(index),
+                                      "amount": prod.prices![0].price,
+                                      "discount": 10
+                                    });
+                                    subtotal += prod.prices![0].price! *
+                                        state.cart.productQuantity(state
+                                            .cart.productIds)["${prod.id}"];
                                     finProd = prod;
                                     break;
                                   }
@@ -194,7 +211,9 @@ class _CartScreenState extends State<CartScreen> {
             margin: EdgeInsets.only(bottom: 10, left: 5, right: 5),
             child: ElevatedButton(
               onPressed: () async {
-                BlocProvider.of<AddressBloc>(context).add(LoadAddress());
+                await _sendCartData(context, list);
+                BlocProvider.of<AddressBloc>(context)
+                    .add(LoadAddress(user!.uid));
                 Navigator.pushNamed(context, '/checkout');
               },
               style: ElevatedButton.styleFrom(
@@ -223,11 +242,23 @@ class _CartScreenState extends State<CartScreen> {
   Future<void> _sendCartData(BuildContext context, List data) async {
     final response;
     // print(data);
-    const String endPoint = "http://192.168.43.174:3000/process";
+    const String endPoint =
+        "http://ec2-18-188-87-26.us-east-2.compute.amazonaws.com:8080/api/order/save";
     final Uri url = Uri.parse(endPoint);
     Map body = {
-      "customer": "447d69f2-35e0-41ce-b785-d0ec4a8b650d",
-      "products": data
+      "userId": user!.uid,
+      "orderProducts": list,
+      "totalPrice": subtotal,
+      "cgstTax": 4.0,
+      "sgstTax": 3.0,
+      "igstTax": 1.0,
+      "discount": 0.0,
+      "paymentId": "b9515dbf-679f-49e4-b1b1-e7632bb6e50k",
+      "promisedDate": "2022-01-01T10:56:15.000+00:00",
+      "createDate": "2022-01-01T10:56:15.000+00:00",
+      "createdBy": "MOHAN",
+      "updatedDate": "2022-01-01T10:56:15.000+00:00",
+      "updatedBy": "KIRAN"
     };
     try {
       response = await http.post(

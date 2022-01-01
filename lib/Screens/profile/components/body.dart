@@ -9,6 +9,7 @@ import 'package:jeevamrut_app/bloc/address/address_bloc.dart';
 import 'package:jeevamrut_app/bloc/bloc/product_bloc.dart';
 import 'package:jeevamrut_app/bloc/cart/cart_bloc.dart';
 import 'package:jeevamrut_app/bloc/pincode/pincode_bloc.dart';
+import 'package:jeevamrut_app/models/firebaseuser.dart';
 import 'package:jeevamrut_app/services/auth.dart';
 import 'package:jeevamrut_app/wrapper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -17,8 +18,8 @@ import 'profile_menu.dart';
 import 'profile_pic.dart';
 
 class Body extends StatelessWidget {
-  const Body({Key? key}) : super(key: key);
-
+  Body({Key? key}) : super(key: key);
+  final user = FirebaseAuth.instance.currentUser;
   Widget getProfileScreen(BuildContext context) {
     return SingleChildScrollView(
       padding: EdgeInsets.symmetric(vertical: 20),
@@ -54,8 +55,11 @@ class Body extends StatelessWidget {
                 press: () {
                   if (state is AddressLoading || state is AddressLoaded) {
                     context.read<AddressBloc>().add(AddressInitial());
-                    context.read<AddressBloc>().add(LoadAddress());
-                    Navigator.pushNamed(context, '/address');
+                    context.read<AddressBloc>().add(LoadAddress(user!.uid));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => DeliveryDetails()));
                   }
                 },
               );

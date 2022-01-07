@@ -20,6 +20,7 @@ class ProductGrid extends StatefulWidget {
 class _ProductGridState extends State<ProductGrid> {
   @override
   void initState() {
+    print("yes");
     BlocProvider.of<CategoriesBloc>(context).add(LoadingCategoriesEvent());
     BlocProvider.of<CategoriesBloc>(context).add(LoadCategories(
         widget.category!, widget.selectedSubCategory!, widget.pincode!));
@@ -37,6 +38,7 @@ class _ProductGridState extends State<ProductGrid> {
           );
         }
         if (state is CategoriesLoaded) {
+          print(state.products.length);
           return GridView.builder(
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,

@@ -1,12 +1,12 @@
 import 'dart:convert';
-import 'dart:io';
+// import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
 import 'package:jeevamrut_app/bloc/address/address_bloc.dart';
-import 'package:jeevamrut_app/bloc/bloc/product_bloc.dart';
+// import 'package:jeevamrut_app/bloc/bloc/product_bloc.dart';
 import 'package:jeevamrut_app/models/address_response.dart';
 
 class AddDeliverAddress extends StatefulWidget {
@@ -205,11 +205,11 @@ class _AddDeliverAddressState extends State<AddDeliverAddress> {
                       _formKey.currentState!.save();
 
                       submitAddress(
-                          widget.addressResponse.id!,
+                          widget.addressResponse.address!.id!,
                           _buildingName,
                           _apartNo,
                           _landmark,
-                          widget.addressResponse.mobile!,
+                          widget.addressResponse.mobileNumber!,
                           _streetName,
                           _cityName,
                           _stateName,
@@ -331,7 +331,7 @@ Future<void> submitAddress(
       " " +
       stateName);
   String endPoint =
-      "http://ec2-18-188-87-26.us-east-2.compute.amazonaws.com:8080/address/${id}";
+      "http://ec2-18-188-87-26.us-east-2.compute.amazonaws.com:8080/api/address/${id}";
   final Uri url = Uri.parse(endPoint);
   Map body = {
     "user": null,

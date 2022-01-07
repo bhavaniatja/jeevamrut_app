@@ -37,16 +37,21 @@ class Body extends StatelessWidget {
                       builder: (context) => const AccountDetails()));
             },
           ),
-          ProfileMenu(
-            text: "Wallet",
-            icon: "assets/icons/wallet.svg",
-            press: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const WalletScreen()));
-            },
-          ),
+          BlocBuilder<AddressBloc, AddressState>(builder: (context, state) {
+            return ProfileMenu(
+                text: "Wallet",
+                icon: "assets/icons/wallet.svg",
+                press: () {
+                  if (state is AddressLoading || state is AddressLoaded) {
+                    context.read<AddressBloc>().add(AddressInitial());
+                    context.read<AddressBloc>().add(LoadAddress(user!.uid));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => WalletScreen()));
+                  }
+                });
+          }),
           BlocBuilder<AddressBloc, AddressState>(
             builder: (context, state) {
               return ProfileMenu(

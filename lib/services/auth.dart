@@ -95,7 +95,7 @@ void postToAws(String uid, String? mobile) async {
     "userId": uid,
     "fname": "Default fname",
     "lname": "Default lname",
-    "email": "bhavani9@gmail.com",
+    "email": "dummyone@gmail.com",
     "mobileNumber": mobile,
     "altMobileNumber": null,
     "mobileVerified": 0,
@@ -103,9 +103,9 @@ void postToAws(String uid, String? mobile) async {
     "role": "user",
     "active": 1,
     "language": "en",
-    "meta": "{\"name\": \"bhav\"}",
+    "meta": "{\"name\": \"dummy\"}",
     "createDate": "2021-12-23T10:45:54.000+00:00",
-    "createdBy": "Mohan",
+    "createdBy": "Bhavani Prasad",
     "updatedDate": "2021-12-23T10:45:54.000+00:00",
     "updatedBy": "Kiran"
   };

@@ -6,7 +6,9 @@ import 'components/body.dart';
 
 class CategoriesScreen extends StatelessWidget {
   final String? category;
-  const CategoriesScreen({Key? key, this.category}) : super(key: key);
+  final int? selectedInd;
+  const CategoriesScreen({Key? key, this.category, this.selectedInd})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +17,7 @@ class CategoriesScreen extends StatelessWidget {
       body: BlocBuilder<PincodeBloc, PincodeState>(
         builder: (context, state) {
           if (state is PincodeEditedState) {
-            return Body(category!, state.pincode);
+            return Body(selectedInd!, category!, state.pincode);
           }
           return Center(
             child: Text("Enter Pincode,Go to HomeScreen"),

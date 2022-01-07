@@ -36,6 +36,7 @@ class _BodyState extends State<Body> {
                           context,
                           MaterialPageRoute(
                               builder: (context) => CategoriesScreen(
+                                    selectedInd: 0,
                                     category: categories[index],
                                   )));
                     })),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:jeevamrut_app/Screens/categories/categories_screen.dart';
 import 'package:jeevamrut_app/bloc/categories/categories_bloc.dart';
 import '../../../constants.dart';
 import 'product_grid.dart';
@@ -8,14 +9,15 @@ import '../../../models/categories_list.dart';
 class Body extends StatefulWidget {
   final String category;
   final String pincode;
-  const Body(this.category, this.pincode, {Key? key}) : super(key: key);
+  final int selectedInd;
+  const Body(this.selectedInd, this.category, this.pincode, {Key? key})
+      : super(key: key);
 
   @override
   State<Body> createState() => _BodyState();
 }
 
 class _BodyState extends State<Body> {
-  int selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -33,18 +35,24 @@ class _BodyState extends State<Body> {
           ),
         ),
         Expanded(
-            child: ProductGrid(map[widget.category]!.elementAt(selectedIndex),
-                widget.category, widget.pincode)),
+            child: ProductGrid(
+                map[widget.category]!.elementAt(widget.selectedInd),
+                widget.category,
+                widget.pincode)),
       ],
     );
   }
 
   Widget buildCategory(int index) {
+    int selectedIndex;
     return GestureDetector(
       onTap: () {
-        setState(() {
-          selectedIndex = index;
-        });
+        selectedIndex = index;
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) => CategoriesScreen(
+                    selectedInd: selectedIndex, category: widget.category)));
         // BlocProvider.of<CategoriesBloc>(context).add(LoadingCategoriesEvent());
       },
       child: Padding(
@@ -56,14 +64,17 @@ class _BodyState extends State<Body> {
               map[widget.category]!.elementAt(index),
               style: TextStyle(
                 fontWeight: FontWeight.bold,
-                color: selectedIndex == index ? kTextColor : kTextLightColor,
+                color:
+                    widget.selectedInd == index ? kTextColor : kTextLightColor,
               ),
             ),
             Container(
               margin: EdgeInsets.only(top: kDefaultPaddin / 4), //top padding 5
               height: 2,
               width: 30,
-              color: selectedIndex == index ? Colors.black : Colors.transparent,
+              color: widget.selectedInd == index
+                  ? Colors.black
+                  : Colors.transparent,
             )
           ],
         ),

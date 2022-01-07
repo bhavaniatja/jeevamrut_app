@@ -67,8 +67,7 @@ class ProductRepository {
       var address = <AddressResponse>[];
       if (response.statusCode == 200) {
         var prodJson = json.decode(response.body);
-        var content = prodJson["address"];
-        return AddressResponse.fromJson(content);
+        return AddressResponse.fromJson(prodJson);
       } else {
         return AddressResponse();
       }
@@ -90,7 +89,7 @@ class ProductRepository {
           return <OrdersResponse>[];
         } else {
           var prodJson = json.decode(response.body);
-          var ordersJson = prodJson["orderProducts"];
+          var ordersJson = prodJson["content"];
           for (var order in ordersJson) {
             orders.add(OrdersResponse.fromJson(order));
           }

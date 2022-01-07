@@ -53,7 +53,7 @@ class HttpService {
     http.Response response;
     final user = FirebaseAuth.instance.currentUser;
     final url = Uri.parse(
-        "http://ec2-18-188-87-26.us-east-2.compute.amazonaws.com:8080/api/order/6ec1fa7c-e39c-46b8-9771-2e8593141973");
+        "http://ec2-18-188-87-26.us-east-2.compute.amazonaws.com:8080/api/order/user?userId=${user!.uid}");
     try {
       response = await http.get(url);
     } on Exception catch (e) {

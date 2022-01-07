@@ -12,239 +12,137 @@ String ordersResponseToJson(OrdersResponse data) => json.encode(data.toJson());
 class OrdersResponse {
   OrdersResponse({
     this.id,
-    this.product,
-    this.amount,
+    this.userId,
+    this.orderProducts,
+    this.totalPrice,
+    this.cgstTax,
+    this.sgstTax,
+    this.igstTax,
     this.discount,
+    this.paymentId,
+    this.promisedDate,
     this.createDate,
     this.createdBy,
     this.updatedDate,
     this.updatedBy,
+    this.status,
+    this.deliveryFee,
   });
 
   String? id;
-  Product? product;
-  double? amount;
+  String? userId;
+  List<OrderProduct>? orderProducts;
+  double? totalPrice;
+  double? cgstTax;
+  double? sgstTax;
+  double? igstTax;
   double? discount;
+  String? paymentId;
+  DateTime? promisedDate;
   DateTime? createDate;
   String? createdBy;
   DateTime? updatedDate;
   String? updatedBy;
+  dynamic status;
+  dynamic deliveryFee;
 
   factory OrdersResponse.fromJson(Map<String, dynamic> json) => OrdersResponse(
         id: json["id"],
-        product: Product.fromJson(json["product"]),
+        userId: json["userId"],
+        orderProducts: List<OrderProduct>.from(
+            json["orderProducts"].map((x) => OrderProduct.fromJson(x))),
+        totalPrice: json["totalPrice"],
+        cgstTax: json["cgstTax"],
+        sgstTax: json["sgstTax"],
+        igstTax: json["igstTax"],
+        discount: json["discount"],
+        paymentId: json["paymentId"],
+        promisedDate: DateTime.parse(json["promisedDate"]),
+        createDate: DateTime.parse(json["createDate"]),
+        createdBy: json["createdBy"],
+        updatedDate: DateTime.parse(json["updatedDate"]),
+        updatedBy: json["updatedBy"],
+        status: json["status"],
+        deliveryFee: json["deliveryFee"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "userId": userId,
+        "orderProducts":
+            List<dynamic>.from(orderProducts!.map((x) => x.toJson())),
+        "totalPrice": totalPrice,
+        "cgstTax": cgstTax,
+        "sgstTax": sgstTax,
+        "igstTax": igstTax,
+        "discount": discount,
+        "paymentId": paymentId,
+        "promisedDate": promisedDate!.toIso8601String(),
+        "createDate": createDate!.toIso8601String(),
+        "createdBy": createdBy,
+        "updatedDate": updatedDate!.toIso8601String(),
+        "updatedBy": updatedBy,
+        "status": status,
+        "deliveryFee": deliveryFee,
+      };
+}
+
+class OrderProduct {
+  OrderProduct({
+    this.id,
+    this.productId,
+    this.orderId,
+    this.amount,
+    this.discount,
+    this.quantity,
+    this.createDate,
+    this.createdBy,
+    this.updatedDate,
+    this.updatedBy,
+    this.status,
+    this.deliveryFee,
+  });
+
+  String? id;
+  dynamic productId;
+  dynamic orderId;
+  double? amount;
+  double? discount;
+  int? quantity;
+  DateTime? createDate;
+  String? createdBy;
+  DateTime? updatedDate;
+  String? updatedBy;
+  dynamic status;
+  dynamic deliveryFee;
+
+  factory OrderProduct.fromJson(Map<String, dynamic> json) => OrderProduct(
+        id: json["id"],
+        productId: json["productId"],
+        orderId: json["orderId"],
         amount: json["amount"],
         discount: json["discount"],
+        quantity: json["quantity"],
         createDate: DateTime.parse(json["createDate"]),
         createdBy: json["createdBy"],
         updatedDate: DateTime.parse(json["updatedDate"]),
         updatedBy: json["updatedBy"],
+        status: json["status"],
+        deliveryFee: json["deliveryFee"],
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
-        "product": product!.toJson(),
+        "productId": productId,
+        "orderId": orderId,
         "amount": amount,
         "discount": discount,
-        "createDate": createDate!.toIso8601String(),
-        "createdBy": createdBy,
-        "updatedDate": updatedDate!.toIso8601String(),
-        "updatedBy": updatedBy,
-      };
-}
-
-class Product {
-  Product({
-    this.id,
-    this.name,
-    this.prices,
-    this.productImage,
-    this.brandName,
-    this.quantity,
-    this.taxCategoryId,
-    this.vendorId,
-    this.description,
-    this.category,
-    this.subCategory,
-    this.manufactureDate,
-    this.expiryDate,
-    this.available,
-    this.threshold,
-    this.pinCode,
-    this.locationCategory,
-    this.meta,
-    this.createDate,
-    this.createdBy,
-    this.updatedDate,
-    this.updatedBy,
-    this.version,
-  });
-
-  String? id;
-  String? name;
-  List<Price>? prices;
-  ProductImage? productImage;
-  String? brandName;
-  String? quantity;
-  String? taxCategoryId;
-  String? vendorId;
-  String? description;
-  String? category;
-  String? subCategory;
-  DateTime? manufactureDate;
-  DateTime? expiryDate;
-  int? available;
-  int? threshold;
-  String? pinCode;
-  String? locationCategory;
-  String? meta;
-  DateTime? createDate;
-  String? createdBy;
-  DateTime? updatedDate;
-  String? updatedBy;
-  String? version;
-
-  factory Product.fromJson(Map<String, dynamic> json) => Product(
-        id: json["id"],
-        name: json["name"],
-        prices: List<Price>.from(json["prices"].map((x) => Price.fromJson(x))),
-        productImage: ProductImage.fromJson(json["productImage"]),
-        brandName: json["brandName"],
-        quantity: json["quantity"],
-        taxCategoryId: json["taxCategoryId"],
-        vendorId: json["vendorId"],
-        description: json["description"],
-        category: json["category"],
-        subCategory: json["subCategory"],
-        manufactureDate: DateTime.parse(json["manufactureDate"]),
-        expiryDate: DateTime.parse(json["expiryDate"]),
-        available: json["available"],
-        threshold: json["threshold"],
-        pinCode: json["pinCode"],
-        locationCategory: json["locationCategory"],
-        meta: json["meta"],
-        createDate: DateTime.parse(json["createDate"]),
-        createdBy: json["createdBy"],
-        updatedDate: DateTime.parse(json["updatedDate"]),
-        updatedBy: json["updatedBy"],
-        version: json["version"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "name": name,
-        "prices": List<dynamic>.from(prices!.map((x) => x.toJson())),
-        "productImage": productImage!.toJson(),
-        "brandName": brandName,
         "quantity": quantity,
-        "taxCategoryId": taxCategoryId,
-        "vendorId": vendorId,
-        "description": description,
-        "category": category,
-        "subCategory": subCategory,
-        "manufactureDate": manufactureDate!.toIso8601String(),
-        "expiryDate": expiryDate!.toIso8601String(),
-        "available": available,
-        "threshold": threshold,
-        "pinCode": pinCode,
-        "locationCategory": locationCategory,
-        "meta": meta,
         "createDate": createDate!.toIso8601String(),
         "createdBy": createdBy,
         "updatedDate": updatedDate!.toIso8601String(),
         "updatedBy": updatedBy,
-        "version": version,
-      };
-}
-
-class Price {
-  Price({
-    this.id,
-    this.productId,
-    this.price,
-    this.type,
-    this.createDate,
-    this.createdBy,
-    this.updatedDate,
-    this.updatedBy,
-  });
-
-  String? id;
-  dynamic productId;
-  int? price;
-  String? type;
-  DateTime? createDate;
-  String? createdBy;
-  DateTime? updatedDate;
-  String? updatedBy;
-
-  factory Price.fromJson(Map<String, dynamic> json) => Price(
-        id: json["id"],
-        productId: json["productId"],
-        price: json["price"],
-        type: json["type"],
-        createDate: DateTime.parse(json["createDate"]),
-        createdBy: json["createdBy"],
-        updatedDate: DateTime.parse(json["updatedDate"]),
-        updatedBy: json["updatedBy"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "productId": productId,
-        "price": price,
-        "type": type,
-        "createDate": createDate!.toIso8601String(),
-        "createdBy": createdBy,
-        "updatedDate": updatedDate!.toIso8601String(),
-        "updatedBy": updatedBy,
-      };
-}
-
-class ProductImage {
-  ProductImage({
-    this.id,
-    this.productId,
-    this.imageUrl,
-    this.format,
-    this.source,
-    this.createDate,
-    this.createdBy,
-    this.updatedDate,
-    this.updatedBy,
-  });
-
-  String? id;
-  dynamic productId;
-  String? imageUrl;
-  String? format;
-  String? source;
-  DateTime? createDate;
-  String? createdBy;
-  DateTime? updatedDate;
-  String? updatedBy;
-
-  factory ProductImage.fromJson(Map<String, dynamic> json) => ProductImage(
-        id: json["id"],
-        productId: json["productId"],
-        imageUrl: json["imageUrl"],
-        format: json["format"],
-        source: json["source"],
-        createDate: DateTime.parse(json["createDate"]),
-        createdBy: json["createdBy"],
-        updatedDate: DateTime.parse(json["updatedDate"]),
-        updatedBy: json["updatedBy"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "productId": productId,
-        "imageUrl": imageUrl,
-        "format": format,
-        "source": source,
-        "createDate": createDate!.toIso8601String(),
-        "createdBy": createdBy,
-        "updatedDate": updatedDate!.toIso8601String(),
-        "updatedBy": updatedBy,
+        "status": status,
+        "deliveryFee": deliveryFee,
       };
 }

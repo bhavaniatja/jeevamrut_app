@@ -3,17 +3,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jeevamrut_app/Screens/cart/components/cart_product_card.dart';
-import 'package:jeevamrut_app/Screens/cart/components/order_summary.dart';
 import 'package:jeevamrut_app/Screens/home/components/icon_btn_with_counter.dart';
-import 'package:jeevamrut_app/Screens/home/home_screen.dart';
 import 'package:jeevamrut_app/bloc/address/address_bloc.dart';
 import 'package:jeevamrut_app/bloc/bloc/product_bloc.dart';
 import 'package:jeevamrut_app/bloc/cart/cart_bloc.dart';
+import 'package:jeevamrut_app/bloc/order_id/orderid_bloc.dart';
 import 'package:jeevamrut_app/bottomnav.dart';
-import 'package:jeevamrut_app/models/Cart.dart';
 import 'package:http/http.dart' as http;
 import 'package:jeevamrut_app/models/product_response.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class CartScreen extends StatefulWidget {
   CartScreen({Key? key}) : super(key: key);
@@ -32,6 +29,8 @@ class _CartScreenState extends State<CartScreen> {
   @override
   void initState() {
     super.initState();
+    subtotal = 0;
+    BlocProvider.of<OrderidBloc>(context).add(LoadingOrderidEvent());
     final state = BlocProvider.of<ProductBloc>(context).state;
     if (state is ProductLoaded) {
       prods = state.products;
@@ -253,7 +252,7 @@ class _CartScreenState extends State<CartScreen> {
       "sgstTax": 3.0,
       "igstTax": 1.0,
       "discount": 0.0,
-      "paymentId": "b9515dbf-679f-49e4-b1b1-e7632bb6e50k",
+      "paymentId": "b9515dbf-679f-49e4-b1b1-e7632bb6e50p",
       "promisedDate": "2022-01-01T10:56:15.000+00:00",
       "createDate": "2022-01-01T10:56:15.000+00:00",
       "createdBy": "MOHAN",
@@ -266,8 +265,10 @@ class _CartScreenState extends State<CartScreen> {
         body: json.encode(body),
         headers: {"Content-Type": "application/json"},
       );
-      var data = response.body;
+      var data = json.decode(response.body);
       print(data);
+      BlocProvider.of<OrderidBloc>(context)
+          .add(LoadOrderid(data["id"], data["totalPrice"]));
       if (response.statusCode == 200) {
         print("jii");
       }

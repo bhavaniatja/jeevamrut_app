@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:jeevamrut_app/models/address_response.dart';
 
 class TransactionsScreen extends StatelessWidget {
-  const TransactionsScreen({Key? key}) : super(key: key);
+  final List<WalletTransaction>? list;
+  const TransactionsScreen(this.list, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    if (list!.isEmpty) {
+      return Center(
+        child: Text("Order Something"),
+      );
+    }
     return Expanded(
       child: Container(
         width: double.infinity,
@@ -24,26 +31,15 @@ class TransactionsScreen extends StatelessWidget {
             ),
             SizedBox(height: 20),
             Expanded(
-                child: ListView(
-              children: [
-                listTile(Icons.shopping_cart, Colors.pink, "Fruits",
-                    "Apples 20KGs", -2000.0),
-                listTile(Icons.shopping_cart, Colors.pink, "Fruits",
-                    "Apples 20KGs", 200.0),
-                listTile(Icons.shopping_cart, Colors.pink, "Fruits",
-                    "Apples 20KGs", -1000.0),
-                listTile(Icons.shopping_cart, Colors.pink, "Fruits",
-                    "Apples 20KGs", 2000.0),
-                listTile(Icons.shopping_cart, Colors.pink, "Fruits",
-                    "Apples 20KGs", 100.0),
-                listTile(Icons.shopping_cart, Colors.pink, "Fruits",
-                    "Apples 20KGs", -20.0),
-                listTile(Icons.shopping_cart, Colors.pink, "Fruits",
-                    "Apples 20KGs", 2000.0),
-                listTile(Icons.shopping_cart, Colors.pink, "Fruits",
-                    "Apples 20KGs", 2000.0),
-              ],
-            ))
+                child: ListView.builder(
+                    itemCount: list!.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return listTile(
+                          list![(list!.length - 1) - index].type!,
+                          list![(list!.length - 1) - index].orderId!,
+                          list![(list!.length - 1) - index].currentBalance!,
+                          list![(list!.length - 1) - index].previousBalance!);
+                    }))
           ],
         ),
       ),
@@ -51,8 +47,7 @@ class TransactionsScreen extends StatelessWidget {
   }
 }
 
-Widget listTile(
-    IconData icon, Color color, String type, String title, double value) {
+Widget listTile(String type, String orderId, double curBal, double prevBal) {
   return InkWell(
     onTap: () {},
     child: Container(
@@ -65,49 +60,62 @@ Widget listTile(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Container(
-              width: 60,
-              height: 60,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(8.0),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                type,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-              child: Icon(
-                icon,
-                color: color,
-              )),
-          SizedBox(width: 12.0),
+              SizedBox(
+                height: 10.0,
+              ),
+              Text(
+                orderId,
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              )
+            ],
+          ),
+          SizedBox(
+            width: 5,
+          ),
           Expanded(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  type,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 22.0,
-                    fontWeight: FontWeight.bold,
+                Text.rich(
+                  TextSpan(
+                    text: "Current Balance:\n",
+                    style: TextStyle(fontSize: 10, color: Colors.white),
+                    children: [
+                      TextSpan(
+                        text: "\u20b9 $curBal",
+                        style: TextStyle(fontSize: 15, color: Colors.white),
+                      ),
+                    ],
                   ),
                 ),
                 SizedBox(
                   height: 10.0,
                 ),
-                Text(
-                  title,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 15.0,
+                Text.rich(
+                  TextSpan(
+                    text: "Previous Balance:\n",
+                    style: TextStyle(fontSize: 10, color: Colors.white),
+                    children: [
+                      TextSpan(
+                        text: "\u20b9 $prevBal",
+                        style: TextStyle(fontSize: 15, color: Colors.white),
+                      ),
+                    ],
                   ),
-                )
+                ),
               ],
             ),
-          ),
-          Text(
-            "\u20b9 $value",
-            style: TextStyle(
-                color: Colors.white,
-                fontSize: 22.0,
-                fontWeight: FontWeight.bold),
           ),
         ],
       ),

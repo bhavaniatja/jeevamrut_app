@@ -263,7 +263,7 @@ class ProductDetail extends StatelessWidget {
                               fontSize: 16,
                               fontWeight: FontWeight.w700,
                               color: Color(0xFF565656))),
-                      Text("\u20b9 ${product.prices![0]}",
+                      Text("\u20b9 ${product.prices![0].price}",
                           style: TextStyle(
                               fontFamily: 'Roboto-Light.ttf',
                               fontSize: 20,

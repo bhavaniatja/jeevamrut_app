@@ -68,10 +68,10 @@ class _DeliveryDetailsState extends State<DeliveryDetails> {
                 ),
                 Column(children: [
                   SingleDeliveryItem(
-                      address: '${state.Address.city}',
-                      title: '${state.Address.createdBy}',
-                      number: '${state.Address.mobile}',
-                      addressType: '${state.Address.type}')
+                      address: '${state.Address.address!.city}',
+                      title: '${state.Address.fname}',
+                      number: '${state.Address.mobileNumber}',
+                      addressType: '${state.Address.address!.type}')
                 ]),
               ],
             );

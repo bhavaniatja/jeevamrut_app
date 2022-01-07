@@ -5,7 +5,7 @@ import 'package:jeevamrut_app/Authenticate/check.dart';
 import 'package:jeevamrut_app/Screens/cart/cart_screen.dart';
 import 'package:jeevamrut_app/Screens/checkout/checkout_screen.dart';
 import 'package:jeevamrut_app/Screens/home/home_screen.dart';
-import 'package:jeevamrut_app/Screens/productgrid/product_grid.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:jeevamrut_app/Screens/profile/components/address_details.dart';
 import 'package:jeevamrut_app/Screens/profile/profile_screen.dart';
 import 'package:jeevamrut_app/Screens/splash.dart';
@@ -13,6 +13,7 @@ import 'package:jeevamrut_app/bloc/address/address_bloc.dart';
 import 'package:jeevamrut_app/bloc/auth/bloc/auth_bloc.dart';
 import 'package:jeevamrut_app/bloc/cart/cart_bloc.dart';
 import 'package:jeevamrut_app/bloc/categories/categories_bloc.dart';
+import 'package:jeevamrut_app/bloc/order_id/orderid_bloc.dart';
 import 'package:jeevamrut_app/bloc/orders/orders_bloc.dart';
 import 'package:jeevamrut_app/bloc/pincode/pincode_bloc.dart';
 import 'package:jeevamrut_app/bottomnav.dart';
@@ -67,6 +68,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(
             create: (_) => AddressBloc(productRepository: ProductRepository())),
         BlocProvider(create: (_) => PincodeBloc()),
+        BlocProvider(create: (_) => OrderidBloc()),
       ],
       child: MaterialApp(
         initialRoute: "/splashscreen",
